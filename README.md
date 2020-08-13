@@ -1,2 +1,2 @@
 # js13k-2020
-JS13KGames entry for 2020, theme is to be announced ...
+JS13KGames entry for 2020, theme is "**404 THEME (NOT) FOUND**".
