@@ -34,7 +34,7 @@ Game ideas
 * Driving game - Always wanted to do a driving game. Some kind of race or chase to get a missing trophy back. With procedural buildings / scenery. Power-ups and boosts.
 * Treasure hunting island hopping platformer - I've previously made a [2D platformer](https://github.com/picosonic/js13k-2018), I like the idea of having multiple islands where you need to solve a puzzle to move to the next island. 
 * Ninja heist game - Where you need to break in to a fortress to retrive a stolen artefact. The ninja can become invisble using scenery to hide in plain sight from guards. Some fighting required when spotted.
-* Flight sim - A low res 3d flying simulator. Things keep getting misplaced, and you need to fly around searching for them to return them to their owners. Possibly helicopter based (would make landings easier), or there is an aeroplane called the Martin 4-0-4.
+* Flight sim - A low res 3D flying simulator. Things keep getting misplaced, and you need to fly around searching for them to return them to their owners. Possibly helicopter based (would make landings easier), or there is an aeroplane called the [Martin 4-0-4](https://en.wikipedia.org/wiki/Martin_4-0-4).
 
 Here is a rough diary of progress as posted on [Twitter](https://twitter.com/femtosonic) and taken from notes and [commit logs](https://github.com/picosonic/js13k-2020/commits/)..
 
