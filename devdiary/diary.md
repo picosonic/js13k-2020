@@ -30,9 +30,9 @@ Once the theme was announced I had a bit of a thought about the kind of game I c
 
 Game ideas
 ----------
-* Golf game - A nod to code golfing, maybe call the course "Missing Links". With procedural (based on predictable RNG) trees / landscapes / hills. Maybe using Simplex/Perlin noise. Some 3D gravity/acceleration with wind and other hazards.
+* Golf game - A nod to [code golfing](https://en.wikipedia.org/wiki/Code_golf), maybe call the course "Missing Links". With procedural (based on predictable RNG) trees / landscapes / hills. Maybe using [Simplex](https://en.wikipedia.org/wiki/Simplex_noise)/[Perlin noise](https://en.wikipedia.org/wiki/Perlin_noise). Some 3D gravity/acceleration with wind and other hazards.
 * Driving game - Always wanted to do a driving game. Some kind of race or chase to get a missing trophy back. With procedural buildings / scenery. Power-ups and boosts.
-* Treasure hunting island hopping platformer - I've previously made a 2d platformer, I like the idea of having multiple islands where you need to solve a puzzle to move to the next island. 
+* Treasure hunting island hopping platformer - I've previously made a [2D platformer](https://github.com/picosonic/js13k-2018), I like the idea of having multiple islands where you need to solve a puzzle to move to the next island. 
 * Ninja heist game - Where you need to break in to a fortress to retrive a stolen artefact. The ninja can become invisble using scenery to hide in plain sight from guards. Some fighting required when spotted.
 * Flight sim - A low res 3d flying simulator. Things keep getting misplaced, and you need to fly around searching for them to return them to their owners. Possibly helicopter based (would make landings easier), or there is an aeroplane called the Martin 4-0-4.
 
@@ -44,4 +44,4 @@ Just getting some game ideas together before starting to do coding experiments.
 
 14th August
 -----------
-Decided there will be some aspect of predictable random number generation in my game. I liked reading the blog about [Wichmann-Hill RNG](https://en.wikipedia.org/wiki/Wichmann%E2%80%93Hill) being used by [Sploosh Kaboom](https://www.youtube.com/watch?v=1hs451PfFzQ) and decided to implement it in JS.
+Decided there will be some aspect of predictable random number generation in my game. I liked reading the blog about [Wichmann-Hill RNG](https://en.wikipedia.org/wiki/Wichmann%E2%80%93Hill) being used by [Sploosh Kaboom](https://www.youtube.com/watch?v=1hs451PfFzQ) mini game in GC [The Legend of Zelda: The Wind Waker](https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_The_Wind_Waker) and decided to implement it in JS.
