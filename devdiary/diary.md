@@ -36,7 +36,7 @@ Game ideas
 * Ninja heist game - Where you need to break in to a fortress to retrive a stolen artefact. The ninja can become invisble using scenery to hide in plain sight from guards. Some fighting required when spotted.
 * Flight sim - A low res 3d flying simulator. Things keep getting misplaced, and you need to fly around searching for them to return them to their owners. Possibly helicopter based (would make landings easier), or there is an aeroplane called the Martin 4-0-4.
 
-Here is a rough diary of progress as posted on [Twitter](https://twitter.com/) and taken from notes and [commit logs](https://github.com/picosonic/js13k-2020/commits/)..
+Here is a rough diary of progress as posted on [Twitter](https://twitter.com/femtosonic) and taken from notes and [commit logs](https://github.com/picosonic/js13k-2020/commits/)..
 
 13th August
 -----------
@@ -44,4 +44,4 @@ Just getting some game ideas together before starting to do coding experiments.
 
 14th August
 -----------
-Decided there will be some aspect of predictable random number generation in my game. I liked reading the blog about Wichmann-Hill RNG being used by Sploosh Kaboom and decided to implement it in JS.
+Decided there will be some aspect of predictable random number generation in my game. I liked reading the blog about [Wichmann-Hill RNG](https://en.wikipedia.org/wiki/Wichmann%E2%80%93Hill) being used by [Sploosh Kaboom](https://www.youtube.com/watch?v=1hs451PfFzQ) and decided to implement it in JS.
