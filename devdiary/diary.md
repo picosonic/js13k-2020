@@ -1,6 +1,6 @@
 # Dev Diary / Postmortem
 
-**UNTITLED**
+**Coding Golf - Broken Links**
 
 This was my third game jam entry, and my fourth HTML5/JS game. My first from JS13k 2018 is available here [Planet Figadore has gone OFFLINE](https://github.com/picosonic/js13k-2018) and my second from JS13k 2019 is available here [BACKSPACE - Return to planet Figadore](https://github.com/picosonic/js13k-2019).
 
@@ -45,3 +45,7 @@ Just getting some game ideas together before starting to do coding experiments.
 14th August
 -----------
 Decided there will be some aspect of predictable random number generation in my game. I liked reading the blog about [Wichmann-Hill RNG](https://en.wikipedia.org/wiki/Wichmann%E2%80%93Hill) being used by [Sploosh Kaboom](https://www.youtube.com/watch?v=1hs451PfFzQ) mini game in GC [The Legend of Zelda: The Wind Waker](https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_The_Wind_Waker) and decided to implement it in JS.
+
+15th August
+-----------
+Decided to go with my first idea of a golf game for my JS13k game so have been learning golf terms/jargon and mechanics in preparation. Playing a few rounds of [Everybody's Golf](https://en.wikipedia.org/wiki/Everybody%27s_Golf_Portable) on the [Sony PSP](https://en.wikipedia.org/wiki/PlayStation_Portable). Going to name my game **"Coding Golf - Broken Links"**.

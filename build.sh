@@ -18,7 +18,7 @@ do
 done
 
 # Add the index header
-echo -n '<!DOCTYPE html><html><head><meta charset="utf-8"/><meta http-equiv="Content-Type" content="text/html;charset=utf-8"/><title>UNTITLED</title><style>' > "${indexcat}"
+echo -n '<!DOCTYPE html><html><head><meta charset="utf-8"/><meta http-equiv="Content-Type" content="text/html;charset=utf-8"/><title>Coding Golf - Broken Links</title><style>' > "${indexcat}"
 
 # Inject the concatenated and minified CSS files
 for file in "main.css"
