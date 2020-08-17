@@ -49,3 +49,6 @@ function startup()
   resize();
   window.addEventListener("resize", resize);
 }
+
+// Run the startup() once page has loaded
+window.onload=function() { startup(); };
