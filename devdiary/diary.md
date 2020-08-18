@@ -49,3 +49,11 @@ Decided there will be some aspect of predictable random number generation in my 
 15th August
 -----------
 Decided to go with my first idea of a golf game for my JS13k game so have been learning golf terms/jargon and mechanics in preparation. Playing a few rounds of [Everybody's Golf](https://en.wikipedia.org/wiki/Everybody%27s_Golf_Portable) on the [Sony PSP](https://en.wikipedia.org/wiki/PlayStation_Portable). Going to name my game **"Coding Golf - Broken Links"**.
+
+16th August
+-----------
+Added default styling, canvas, gamestate and startup code. Also fixed display area to 1280x720 resolutionwith auto resizing to fill the available area but keeping the resolution and aspect ratio (this adds black bars when the aspect ratio doesn't match). I may detect portrait and rotate as appropriate for mobile oplay.
+
+17th August
+-----------
+Golf ball is moving along nicely. Affected by gravity, air resistance and friction. Next to add random(ish) wind, then on to terrain generation.
