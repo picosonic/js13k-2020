@@ -9,6 +9,12 @@ var gs={
   acc:0, // accumulated time since last frame
   lasttime:0, // time of last frame
 
+  // physics in pixels per frame @ 60fps
+  gravity:0.1,
+  terminalvelocity:25,
+  airresistance:0.00001,
+  friction:0.1,
+
   // Canvas object
   canvas:null,
   ctx:null,
@@ -16,12 +22,12 @@ var gs={
   ball:{
     // Position
     x:0,
-    y:0,
+    y:ymax,
     z:0,
 
     // Velocity
     vx:4,
-    vy:4,
+    vy:-8,
     vz:0
   },
 
@@ -37,13 +43,35 @@ function ballmoving()
 // Move the ball onwards
 function moveball()
 {
+  // Apply gravity
+  if (gs.ball.vy<gs.terminalvelocity)
+    gs.ball.vy+=gs.gravity;
+
+  // Slow ball down by air resistance or friction
+  if (gs.ball.vx>0)
+  {
+    if (gs.ball.y<ymax)
+      gs.ball.vx-=gs.airresistance;
+    else
+      gs.ball.vx-=gs.friction;
+  }
+
   gs.ball.x+=gs.ball.vx;
   gs.ball.y+=gs.ball.vy;
   gs.ball.z+=gs.ball.vz;
 
   // Stop it going off screen
-  if (gs.ball.x>xmax) gs.ball.x=0;
-  if (gs.ball.y>ymax) gs.ball.y=0;
+  if (gs.ball.x>xmax)
+  {
+    gs.ball.x=xmax;
+  }
+
+  // When it hits the ground reverse to half it's vertical velocity
+  if (gs.ball.y>ymax)
+  {
+    gs.ball.y=ymax;
+    gs.ball.vy=-(gs.ball.vy/2);
+  }
 }
 
 // Render the current scene
@@ -123,6 +151,17 @@ function resize()
   gs.canvas.style.height=height+"px";
 }
 
+function kick()
+{
+  gs.ball.x=0;
+  gs.ball.y=ymax;
+  gs.ball.z=0;
+
+  gs.ball.vx=4;
+  gs.ball.vy=-8;
+  gs.ball.vz=0;
+}
+
 function startup()
 {
   // Test using RNG
@@ -147,6 +186,8 @@ function startup()
 
   resize();
   window.addEventListener("resize", resize);
+
+  setInterval(function(){kick();}, 6000);
 }
 
 // Run the startup() once page has loaded
