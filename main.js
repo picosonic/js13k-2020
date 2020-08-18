@@ -14,6 +14,7 @@ var gs={
   terminalvelocity:25,
   airresistance:0.00001,
   friction:0.1,
+  wind:0, // TODO add angle and speed
 
   // Canvas object
   canvas:null,
@@ -47,6 +48,9 @@ function moveball()
   if (gs.ball.vy<gs.terminalvelocity)
     gs.ball.vy+=gs.gravity;
 
+  // Apply wind
+  gs.ball.vx+=gs.wind;
+
   // Slow ball down by air resistance or friction
   if (gs.ball.vx>0)
   {
@@ -70,7 +74,7 @@ function moveball()
   if (gs.ball.y>ymax)
   {
     gs.ball.y=ymax;
-    gs.ball.vy=-(gs.ball.vy/2);
+    gs.ball.vy=-(gs.ball.vy*0.5);
   }
 }
 
@@ -81,7 +85,7 @@ function render()
   gs.ctx.clearRect(0, 0, gs.canvas.width, gs.canvas.height);
 
   gs.ctx.beginPath();
-  gs.ctx.arc(gs.ball.x, gs.ball.y, 10, 0, 2*Math.PI);
+  gs.ctx.arc(Math.floor(gs.ball.x), Math.floor(gs.ball.y), 10, 0, 2*Math.PI);
   gs.ctx.fill();
 }
 
@@ -151,6 +155,7 @@ function resize()
   gs.canvas.style.height=height+"px";
 }
 
+// Reset ball
 function kick()
 {
   gs.ball.x=0;
@@ -160,6 +165,9 @@ function kick()
   gs.ball.vx=4;
   gs.ball.vy=-8;
   gs.ball.vz=0;
+
+  // Between -0.05 and +0.05
+  gs.wind=(rng()-0.5)*0.01;
 }
 
 function startup()
