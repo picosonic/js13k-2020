@@ -20,6 +20,10 @@ var gs={
   canvas:null,
   ctx:null,
 
+  // Offscreen canvas
+  offcanvas:null,
+  offctx:null,
+
   ball:{
     // Position
     x:0,
@@ -83,6 +87,9 @@ function render()
 {
   // Clear the screen
   gs.ctx.clearRect(0, 0, gs.canvas.width, gs.canvas.height);
+
+  // Copy the offscren canvas
+  gs.ctx.drawImage(gs.offcanvas, 0, 0);
 
   gs.ctx.beginPath();
   gs.ctx.arc(Math.floor(gs.ball.x), Math.floor(gs.ball.y), 10, 0, 2*Math.PI);
@@ -151,13 +158,56 @@ function resize()
   gs.canvas.style.top=top+"px";
   gs.canvas.style.left=left+"px";
 
-  gs.canvas.style.width=width+"px";
-  gs.canvas.style.height=height+"px";
+//  gs.canvas.style.width=width+"px";
+//  gs.canvas.style.height=height+"px";
+  gs.canvas.style.transformOrigin='0 0';
+  gs.canvas.style.transform='scale('+(width/xmax)+')';
+}
+
+function generatecourse(hole)
+{
+  var segments=Math.floor(rng()*(hole/6))+2;
+  var segment;
+  var x=0;
+  var y=0;
+
+  gs.offctx.clearRect(0, 0, gs.offcanvas.width, gs.offcanvas.height);
+
+  // Calculate segments
+  for (segment=0; segment<segments; segment++)
+  {
+    x+=(xmax/10);
+    y=(Math.floor(rng()*5)+1)*(ymax/6);
+
+    gs.offctx.beginPath();
+    gs.offctx.arc(Math.floor(x), Math.floor(y), 10, 0, 2*Math.PI);
+    gs.offctx.fill();
+  }
+
+  // Tee
+
+  // Bend left or right
+
+  // Length of course
+
+  // Width of course
+
+  // Green
+
+  // Rough
+
+  // Trees
+
+  // Other greenery edges
+
+  // Hazards - sand or water
 }
 
 // Reset ball
 function kick()
 {
+  generatecourse(Math.floor(rng()*18));
+
   gs.ball.x=0;
   gs.ball.y=ymax;
   gs.ball.z=0;
@@ -181,11 +231,20 @@ function startup()
   console.log(Math.floor(rng()*8));
 
   gs.canvas=document.getElementById('canvas');
-  gs.ctx=this.canvas.getContext('2d');
+  gs.ctx=gs.canvas.getContext('2d');
 
   gs.ctx.fillStyle="rgba(255,255,255,1)";
   gs.ctx.strokeStyle="rgba(255,255,255,1)";
   gs.ctx.lineWidth=1;
+
+  gs.offcanvas=document.createElement('canvas');
+  gs.offcanvas.width=xmax;
+  gs.offcanvas.height=ymax;
+  gs.offctx=gs.offcanvas.getContext('2d');
+
+  gs.offctx.fillStyle="rgba(255,0,255,1)";
+  gs.offctx.strokeStyle="rgba(255,0,255,1)";
+  gs.offctx.lineWidth=1;
 
   // Put straight into game
   gs.state=2;

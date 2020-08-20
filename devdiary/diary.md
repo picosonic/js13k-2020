@@ -57,3 +57,11 @@ Added default styling, canvas, gamestate and startup code. Also fixed display ar
 17th August
 -----------
 Golf ball is moving along nicely. Affected by gravity, air resistance and friction. Next to add random(ish) wind, then on to terrain generation.
+
+18th August
+-----------
+Added some basic wind processing.
+
+19th August
+-----------
+Playing about with ideas for the course genertor.
