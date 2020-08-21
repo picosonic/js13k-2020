@@ -24,6 +24,8 @@ var gs={
   offcanvas:null,
   offctx:null,
 
+  hole:1,
+
   ball:{
     // Position
     x:0,
@@ -106,6 +108,11 @@ function update()
 // Called once per frame for animation updates
 function rafcallback(timestamp)
 {
+  // Apparently gamepad support only now works via https
+  //   see https://hacks.mozilla.org/2020/06/securing-gamepad-api/
+  if ((location.protocol=='https:') && (!!(navigator.getGamepads)))
+    gamepadscan();
+
   // First time round, just save epoch
   if (gs.lasttime>0)
   {
@@ -164,25 +171,61 @@ function resize()
   gs.canvas.style.transform='scale('+(width/xmax)+')';
 }
 
-function generatecourse(hole)
+function generatecourse()
 {
-  var segments=Math.floor(rng()*(hole/6))+2;
+  var numsegments=Math.floor(rng()*(gs.hole/6))+2;
   var segment;
   var x=0;
   var y=0;
+  var lasty=0;
+  var segments=[];
 
   gs.offctx.clearRect(0, 0, gs.offcanvas.width, gs.offcanvas.height);
 
+  gs.offctx.fillStyle="rgba(0,255,0,1)";
+  gs.offctx.strokeStyle="rgba(0,255,0,1)";
+  gs.offctx.lineCap="round";
+  gs.offctx.lineWidth=100;
+
+  gs.offctx.font="50px sans";
+  gs.offctx.fillText("Hole "+gs.hole, 10, 50);
+
+  gs.offctx.beginPath();
+
   // Calculate segments
-  for (segment=0; segment<segments; segment++)
+  for (segment=0; segment<numsegments; segment++)
   {
     x+=(xmax/10);
-    y=(Math.floor(rng()*5)+1)*(ymax/6);
+    y=(Math.floor(rng()*(lasty==0?5:2))+(lasty==0?1:lasty))*(ymax/6);
 
-    gs.offctx.beginPath();
-    gs.offctx.arc(Math.floor(x), Math.floor(y), 10, 0, 2*Math.PI);
-    gs.offctx.fill();
+    segments.push({x:x, y:y});
+
+    if (segment==0)
+      gs.offctx.moveTo(Math.floor(x), Math.floor(y));
+    else
+      gs.offctx.lineTo(Math.floor(x), Math.floor(y));
   }
+  gs.offctx.stroke();
+
+  // Draw tee
+  gs.offctx.fillStyle="rgba(255,0,0,1)";
+  gs.offctx.strokeStyle="rgba(255,0,0,1)";
+  gs.offctx.lineCap="round";
+  gs.offctx.lineWidth=100;
+
+  gs.offctx.beginPath();
+  gs.offctx.arc(segments[0].x, segments[0].y, 10, 0, 2*Math.PI);
+  gs.offctx.fill();
+
+  // Draw hole
+  gs.offctx.fillStyle="rgba(0,0,255,1)";
+  gs.offctx.strokeStyle="rgba(0,0,255,1)";
+  gs.offctx.lineCap="round";
+  gs.offctx.lineWidth=100;
+
+  gs.offctx.beginPath();
+  gs.offctx.arc(segments[segments.length-1].x, segments[segments.length-1].y, 10, 0, 2*Math.PI);
+  gs.offctx.fill();
 
   // Tee
 
@@ -206,7 +249,10 @@ function generatecourse(hole)
 // Reset ball
 function kick()
 {
-  generatecourse(Math.floor(rng()*18));
+  gs.hole++;
+  if (gs.hole>18) gs.hole=1;
+
+  generatecourse();
 
   gs.ball.x=0;
   gs.ball.y=ymax;
@@ -218,6 +264,17 @@ function kick()
 
   // Between -0.05 and +0.05
   gs.wind=(rng()-0.5)*0.01;
+}
+
+function clearinputstate()
+{
+  keystate=0;
+  padstate=0;
+}
+
+function ispressed(keybit)
+{
+  return (((keystate&keybit)!=0) || ((padstate&keybit)!=0));
 }
 
 function startup()
@@ -242,17 +299,33 @@ function startup()
   gs.offcanvas.height=ymax;
   gs.offctx=gs.offcanvas.getContext('2d');
 
-  gs.offctx.fillStyle="rgba(255,0,255,1)";
-  gs.offctx.strokeStyle="rgba(255,0,255,1)";
-  gs.offctx.lineWidth=1;
+  resize();
+  window.addEventListener("resize", resize);
+
+  document.onkeydown=function(e)
+  {
+    e = e || window.event;
+    updatekeystate(e, 1);
+  };
+
+  document.onkeyup=function(e)
+  {
+    e = e || window.event;
+    updatekeystate(e, 0);
+  };
+
+  // Stop things from being dragged around
+  window.ondragstart=function(e)
+  {
+    e = e || window.event;
+    e.preventDefault();
+  };
 
   // Put straight into game
   gs.state=2;
 
+  generatecourse();
   window.requestAnimationFrame(rafcallback);
-
-  resize();
-  window.addEventListener("resize", resize);
 
   setInterval(function(){kick();}, 6000);
 }

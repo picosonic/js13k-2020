@@ -65,3 +65,11 @@ Added some basic wind processing.
 19th August
 -----------
 Playing about with ideas for the course genertor.
+
+20th August
+-----------
+More work on course generator.
+
+21st August
+-----------
+Added representation of tee and hole to course generator. Added keyboard and gamepad libraries.
