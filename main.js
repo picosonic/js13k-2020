@@ -24,6 +24,17 @@ var gs={
   offcanvas:null,
   offctx:null,
 
+  // HUD canvas
+  hudcanvas:null,
+  hudctx:null,
+
+  // Swing meter
+  swingstage:1, // 0=hidden, 1=idle, 2=power, 3=accuracy, 4=done
+  swingpoint:0, // point within swing to draw paddle
+  swingpower:0, // selected power %
+  swingaccuracy:0, // selected accuracy (hook, perfect, slice)
+  swingspeed:0, // movement per frame as a percentage
+
   hole:1,
 
   ball:{
@@ -84,6 +95,25 @@ function moveball()
   }
 }
 
+function swingmeter()
+{
+  // Draw the swing meter
+  gs.hudctx.lineWidth=40;
+
+  gs.hudctx.beginPath();
+  gs.hudctx.arc(640, 520, 160, 0, Math.PI);
+  gs.hudctx.stroke();
+
+  // Draw the paddle
+  gs.hudctx.strokeStyle="rgba(255,0,0,1)";
+  gs.hudctx.lineWidth=10;
+
+  gs.hudctx.beginPath();
+  gs.hudctx.moveTo(640+(135*Math.cos(gs.swingpoint/33)), 520+(135*Math.sin(gs.swingpoint/33)));
+  gs.hudctx.lineTo(640+(185*Math.cos(gs.swingpoint/33)), 520+(185*Math.sin(gs.swingpoint/33)));
+  gs.hudctx.stroke();
+}
+
 // Render the current scene
 function render()
 {
@@ -93,9 +123,19 @@ function render()
   // Copy the offscren canvas
   gs.ctx.drawImage(gs.offcanvas, 0, 0);
 
+  // Draw the ball
   gs.ctx.beginPath();
   gs.ctx.arc(Math.floor(gs.ball.x), Math.floor(gs.ball.y), 10, 0, 2*Math.PI);
   gs.ctx.fill();
+
+  gs.hudctx.clearRect(0, 0, gs.hudcanvas.width, gs.hudcanvas.height);
+  gs.hudctx.fillStyle="rgba(255,255,0,1)";
+  gs.hudctx.strokeStyle="rgba(255,255,0,1)";
+  gs.hudctx.font="50px sans";
+  gs.hudctx.fillText("Hole "+gs.hole, 10, 50);
+
+  if (gs.swingstage>0)
+    swingmeter();
 }
 
 // Update step
@@ -103,6 +143,71 @@ function update()
 {
   // Move the ball
   moveball();
+
+  // Check for swing meter
+  switch (gs.swingstage)
+  {
+    case 0: // Hidden - do nothing
+      break;
+
+    case 1: // Idle - wait for keypress
+      if (ispressed(16))
+      {
+        gs.swingspeed=2;
+        gs.swingpoint=0;
+
+        gs.swingstage=2;
+        clearinputstate();
+      }
+      break;
+
+    case 2: // Power - power from 0% to 100%
+      gs.swingpoint+=gs.swingspeed;
+
+      if (ispressed(16))
+      {
+        gs.swingpower=gs.swingpoint;
+        gs.swingstage=3;
+        clearinputstate();
+      }
+
+      if (gs.swingpoint>100)
+      {
+        gs.swingpoint=100;
+        gs.swingspeed*=2;
+
+        gs.swingpower=gs.swingpoint;
+        gs.swingstage=3;
+      }
+      break;
+
+    case 3: // Quick accuracy - no power selected so whizz back to accuracy
+      gs.swingpoint-=gs.swingspeed;
+
+      if (ispressed(16))
+      {
+        gs.swingaccuracy=gs.swingpoint;
+        gs.swingstage=4;
+        clearinputstate();
+      }
+
+      if (gs.swingpoint<0)
+      {
+        gs.swingpoint=0;
+        gs.swingaccuracy=gs.swingpoint;
+        gs.swingstage=4;
+      }
+      break;
+
+    case 4: // Done - just show it on screen
+      gs.swingstage=1; // TODO remove later
+      break;
+
+    default:
+      clearinputstate();
+      gs.swingstage=0;
+      break;
+  }
 }
 
 // Called once per frame for animation updates
@@ -162,13 +267,19 @@ function resize()
     top=Math.floor((window.innerHeight/2)-(height/2));
   }
 
+  // Play canvas
   gs.canvas.style.top=top+"px";
   gs.canvas.style.left=left+"px";
 
-//  gs.canvas.style.width=width+"px";
-//  gs.canvas.style.height=height+"px";
   gs.canvas.style.transformOrigin='0 0';
   gs.canvas.style.transform='scale('+(width/xmax)+')';
+
+  // HUD
+  gs.hudcanvas.style.top=top+"px";
+  gs.hudcanvas.style.left=left+"px";
+
+  gs.hudcanvas.style.transformOrigin='0 0';
+  gs.hudcanvas.style.transform='scale('+(width/xmax)+')';
 }
 
 function generatecourse()
@@ -186,9 +297,6 @@ function generatecourse()
   gs.offctx.strokeStyle="rgba(0,255,0,1)";
   gs.offctx.lineCap="round";
   gs.offctx.lineWidth=100;
-
-  gs.offctx.font="50px sans";
-  gs.offctx.fillText("Hole "+gs.hole, 10, 50);
 
   gs.offctx.beginPath();
 
@@ -298,6 +406,11 @@ function startup()
   gs.offcanvas.width=xmax;
   gs.offcanvas.height=ymax;
   gs.offctx=gs.offcanvas.getContext('2d');
+
+  gs.hudcanvas=document.getElementById('hud');
+  gs.hudcanvas.width=xmax;
+  gs.hudcanvas.height=ymax;
+  gs.hudctx=gs.hudcanvas.getContext('2d');
 
   resize();
   window.addEventListener("resize", resize);
