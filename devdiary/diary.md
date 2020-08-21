@@ -73,3 +73,7 @@ More work on course generator.
 21st August
 -----------
 Added representation of tee and hole to course generator. Added keyboard and gamepad libraries.
+
+22nd August
+-----------
+Added a basic golf swing meter. Key to start, then again to select power percentage, finally one more press to determine accuracy (hook / perfect / slice).
