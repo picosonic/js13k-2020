@@ -52,7 +52,7 @@ Decided to go with my first idea of a golf game for my JS13k game so have been l
 
 16th August
 -----------
-Added default styling, canvas, gamestate and startup code. Also fixed display area to 1280x720 resolutionwith auto resizing to fill the available area but keeping the resolution and aspect ratio (this adds black bars when the aspect ratio doesn't match). I may detect portrait and rotate as appropriate for mobile oplay.
+Added default styling, canvas, gamestate and startup code. Also fixed display area to 1280x720 resolution with auto resizing to fill the available area but keeping the resolution and aspect ratio (this adds black bars when the aspect ratio doesn't match). I may detect portrait and rotate as appropriate for mobile oplay.
 
 17th August
 -----------
@@ -77,3 +77,4 @@ Added representation of tee and hole to course generator. Added keyboard and gam
 22nd August
 -----------
 Added a basic golf swing meter. Key to start, then again to select power percentage, finally one more press to determine accuracy (hook / perfect / slice).
+Did some research into different golf clubs including optimal distance and typical loft values.

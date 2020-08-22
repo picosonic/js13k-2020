@@ -49,6 +49,35 @@ var gs={
     vz:0
   },
 
+  clubs:[
+    // Woods / Drivers
+    {name:"1 Wood", dist:278, loft:14},
+    {name:"2 Wood", dist:244, loft:16},
+    {name:"3 Wood", dist:222, loft:18},
+    {name:"4 Wood", dist:200, loft:20},
+    {name:"5 Wood", dist:178, loft:22},
+
+    // Irons
+    {name:"1 Iron", dist:211, loft:14},
+    {name:"2 Iron", dist:200, loft:16},
+    {name:"3 Iron", dist:189, loft:20},
+    {name:"4 Iron", dist:178, loft:25},
+    {name:"5 Iron", dist:167, loft:29},
+    {name:"6 Iron", dist:156, loft:31},
+    {name:"7 Iron", dist:145, loft:34},
+    {name:"8 Iron", dist:134, loft:37},
+    {name:"9 Iron", dist:123, loft:41},
+
+    // Wedges
+    {name:"Pitching", dist:115, loft:50},
+    {name:"Gap", dist:106, loft:54},
+    {name:"Sand", dist:70, loft:58},
+    {name:"Lob", dist:30, loft:64},
+
+    // Putter
+    {name:"Putter", dist:10, loft:4},
+  ],
+
   state:0 // 0=intro, 1=title, 2=ingame 3=completed
 };
 
