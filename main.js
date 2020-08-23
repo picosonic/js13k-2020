@@ -130,7 +130,7 @@ function swingmeter()
   gs.hudctx.lineWidth=40;
 
   gs.hudctx.beginPath();
-  gs.hudctx.arc(640, 520, 160, 0, Math.PI);
+  gs.hudctx.arc(640, 520, 160, (2*Math.PI)-0.2, Math.PI+0.2);
   gs.hudctx.stroke();
 
   // Draw the paddle
@@ -160,8 +160,8 @@ function render()
   gs.hudctx.clearRect(0, 0, gs.hudcanvas.width, gs.hudcanvas.height);
   gs.hudctx.fillStyle="rgba(255,255,0,1)";
   gs.hudctx.strokeStyle="rgba(255,255,0,1)";
-  gs.hudctx.font="50px sans";
-  gs.hudctx.fillText("Hole "+gs.hole, 10, 50);
+
+  write(gs.hudctx, 10, 10, "Hole "+gs.hole, 5, "rgb(255,255,0)");
 
   if (gs.swingstage>0)
     swingmeter();
@@ -460,6 +460,18 @@ function startup()
   window.ondragstart=function(e)
   {
     e = e || window.event;
+    e.preventDefault();
+  };
+
+  window.onmousedown=function(e)
+  {
+    keystate|=16;
+    e.preventDefault();
+  };
+
+  window.onmouseup=function(e)
+  {
+    keystate&=~16;
     e.preventDefault();
   };
 
