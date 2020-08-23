@@ -3,6 +3,9 @@ var thiskey=0;
 
 function updatekeystate(e, dir)
 {
+  // Filter out repeats
+  if (e.repeat) return;
+
   switch (e.which)
   {
     case 37: // cursor left
