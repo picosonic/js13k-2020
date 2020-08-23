@@ -78,3 +78,7 @@ Added representation of tee and hole to course generator. Added keyboard and gam
 -----------
 Added a basic golf swing meter. Key to start, then again to select power percentage, finally one more press to determine accuracy (hook / perfect / slice).
 Did some research into different golf clubs including optimal distance and typical loft values.
+
+23rd August
+-----------
+Added 8bit font and writer for canvas. Filter out keyboard repeats. Reduced speed of failed power selection on swing meter.
