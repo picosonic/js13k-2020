@@ -161,7 +161,7 @@ function render()
   gs.hudctx.fillStyle="rgba(255,255,0,1)";
   gs.hudctx.strokeStyle="rgba(255,255,0,1)";
 
-  write(gs.hudctx, 10, 10, "Hole "+gs.hole, 5, "rgb(255,255,0)");
+  write(gs.hudctx, 10, 10, "Hole "+gs.hole, 5, "rgba(255,255,0,0.9)");
 
   if (gs.swingstage>0)
     swingmeter();
@@ -203,7 +203,7 @@ function update()
       if (gs.swingpoint>100)
       {
         gs.swingpoint=100;
-        gs.swingspeed*=2;
+        gs.swingspeed*=1.2;
 
         gs.swingpower=gs.swingpoint;
         gs.swingstage=3;
@@ -403,17 +403,20 @@ function kick()
   gs.wind=(rng()-0.5)*0.01;
 }
 
+// Clear both keyboard and gamepad input state
 function clearinputstate()
 {
   keystate=0;
   padstate=0;
 }
 
+// Check if an input is set in either keyboard or gamepad input state
 function ispressed(keybit)
 {
   return (((keystate&keybit)!=0) || ((padstate&keybit)!=0));
 }
 
+// Startup called once when page is loaded
 function startup()
 {
   // Test using RNG
@@ -447,6 +450,7 @@ function startup()
   document.onkeydown=function(e)
   {
     e = e || window.event;
+
     updatekeystate(e, 1);
   };
 
