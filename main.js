@@ -156,6 +156,18 @@ function swingmeter()
   // Add the text
   write(gs.hudctx, 465, 430, ""+gs.clubs[gs.club].dist+"y", 3, "rgb(0,0,0)");
 
+  // Draw the swing power (if set)
+  if (gs.swingpower!=0)
+  {
+    gs.hudctx.strokeStyle="rgba(0,0,255,1)";
+    gs.hudctx.lineWidth=10;
+
+    gs.hudctx.beginPath();
+    gs.hudctx.moveTo(640+(135*Math.cos(gs.swingpower/point)), 500+(135*Math.sin(gs.swingpower/point)));
+    gs.hudctx.lineTo(640+(185*Math.cos(gs.swingpower/point)), 500+(185*Math.sin(gs.swingpower/point)));
+    gs.hudctx.stroke();
+  }
+
   // Draw the paddle
   gs.hudctx.strokeStyle="rgba(255,0,0,1)";
   gs.hudctx.lineWidth=10;
@@ -204,6 +216,9 @@ function update()
       if (ispressed(16))
       {
         clearinputstate();
+
+        gs.swingpower=0;
+        gs.swingaccuracy=0;
 
         gs.swingspeed=1;
         gs.swingpoint=0;
