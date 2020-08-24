@@ -155,6 +155,7 @@ function swingmeter()
 
   // Add the text
   write(gs.hudctx, 465, 430, ""+gs.clubs[gs.club].dist+"y", 3, "rgb(0,0,0)");
+  write(gs.hudctx, 765, 430, gs.clubs[gs.club].name, 3, "rgb(0,0,0)");
 
   // Draw the swing power (if set)
   if (gs.swingpower!=0)
