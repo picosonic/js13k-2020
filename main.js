@@ -49,6 +49,9 @@ var gs={
     vz:0
   },
 
+  // Selected club
+  club:0,
+
   clubs:[
     // Woods / Drivers
     {name:"1 Wood", dist:278, loft:14},
@@ -126,20 +129,40 @@ function moveball()
 
 function swingmeter()
 {
+  var point=32;
+
   // Draw the swing meter
+  gs.hudctx.strokeStyle="rgba(255,255,0,0.8)";
   gs.hudctx.lineWidth=40;
 
   gs.hudctx.beginPath();
-  gs.hudctx.arc(640, 520, 160, (2*Math.PI)-0.2, Math.PI+0.2);
+  gs.hudctx.arc(640, 500, 160, (2*Math.PI)-0.2, Math.PI+0.2);
   gs.hudctx.stroke();
+
+  // Draw the swing scale
+  gs.hudctx.strokeStyle="rgb(0,0,0)";
+  gs.hudctx.lineWidth=2;
+
+  for (var i=0; i<=100; i+=25)
+  {
+    write(gs.hudctx, 630+(195*Math.cos(i/point)), 500+(195*Math.sin(i/point)), ""+i, 2, "rgb(0,0,0)");
+
+    gs.hudctx.beginPath();
+    gs.hudctx.moveTo(640+(135*Math.cos(i/point)), 500+(135*Math.sin(i/point)));
+    gs.hudctx.lineTo(640+(185*Math.cos(i/point)), 500+(185*Math.sin(i/point)));
+    gs.hudctx.stroke();
+  }
+
+  // Add the text
+  write(gs.hudctx, 465, 430, ""+gs.clubs[gs.club].dist+"y", 3, "rgb(0,0,0)");
 
   // Draw the paddle
   gs.hudctx.strokeStyle="rgba(255,0,0,1)";
   gs.hudctx.lineWidth=10;
 
   gs.hudctx.beginPath();
-  gs.hudctx.moveTo(640+(135*Math.cos(gs.swingpoint/33)), 520+(135*Math.sin(gs.swingpoint/33)));
-  gs.hudctx.lineTo(640+(185*Math.cos(gs.swingpoint/33)), 520+(185*Math.sin(gs.swingpoint/33)));
+  gs.hudctx.moveTo(640+(135*Math.cos(gs.swingpoint/point)), 500+(135*Math.sin(gs.swingpoint/point)));
+  gs.hudctx.lineTo(640+(185*Math.cos(gs.swingpoint/point)), 500+(185*Math.sin(gs.swingpoint/point)));
   gs.hudctx.stroke();
 }
 
@@ -158,8 +181,6 @@ function render()
   gs.ctx.fill();
 
   gs.hudctx.clearRect(0, 0, gs.hudcanvas.width, gs.hudcanvas.height);
-  gs.hudctx.fillStyle="rgba(255,255,0,1)";
-  gs.hudctx.strokeStyle="rgba(255,255,0,1)";
 
   write(gs.hudctx, 10, 10, "Hole "+gs.hole, 5, "rgba(255,255,0,0.9)");
 
@@ -182,11 +203,12 @@ function update()
     case 1: // Idle - wait for keypress
       if (ispressed(16))
       {
-        gs.swingspeed=2;
+        clearinputstate();
+
+        gs.swingspeed=1;
         gs.swingpoint=0;
 
         gs.swingstage=2;
-        clearinputstate();
       }
       break;
 
@@ -195,14 +217,15 @@ function update()
 
       if (ispressed(16))
       {
+        clearinputstate();
+
         gs.swingpower=gs.swingpoint;
         gs.swingstage=3;
-        clearinputstate();
       }
 
-      if (gs.swingpoint>100)
+      if (gs.swingpoint>105)
       {
-        gs.swingpoint=100;
+        gs.swingpoint=105;
         gs.swingspeed*=1.2;
 
         gs.swingpower=gs.swingpoint;
@@ -210,25 +233,30 @@ function update()
       }
       break;
 
-    case 3: // Quick accuracy - no power selected so whizz back to accuracy
+    case 3: // Accuracy - aim for sweetspot
       gs.swingpoint-=gs.swingspeed;
 
       if (ispressed(16))
       {
+        clearinputstate();
+
         gs.swingaccuracy=gs.swingpoint;
         gs.swingstage=4;
-        clearinputstate();
       }
 
-      if (gs.swingpoint<0)
+      if (gs.swingpoint<-5)
       {
-        gs.swingpoint=0;
+        gs.swingpoint=-5;
         gs.swingaccuracy=gs.swingpoint;
         gs.swingstage=4;
       }
       break;
 
     case 4: // Done - just show it on screen
+      clearinputstate();
+
+      console.log("Power "+gs.swingpower+" Accuracy "+gs.swingaccuracy);
+
       gs.swingstage=1; // TODO remove later
       break;
 
