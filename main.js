@@ -280,6 +280,26 @@ function update()
       gs.swingstage=0;
       break;
   }
+
+  // Check for changing club
+  if (gs.swingstage<2)
+  {
+    if (ispressed(2)) // Up
+    {
+      clearinputstate();
+
+      if (gs.club>0)
+        gs.club--;
+    }
+    else
+    if (ispressed(8)) // Down
+    {
+      clearinputstate();
+
+      if (gs.club<(gs.clubs.length-1))
+        gs.club++;
+    }
+  }
 }
 
 // Called once per frame for animation updates
