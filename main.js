@@ -160,7 +160,7 @@ function swingmeter()
   // Draw the swing power (if set)
   if (gs.swingpower!=0)
   {
-    gs.hudctx.strokeStyle="rgba(0,0,255,1)";
+    gs.hudctx.strokeStyle="rgb(0,0,255)";
     gs.hudctx.lineWidth=10;
 
     gs.hudctx.beginPath();
@@ -170,7 +170,7 @@ function swingmeter()
   }
 
   // Draw the paddle
-  gs.hudctx.strokeStyle="rgba(255,0,0,1)";
+  gs.hudctx.strokeStyle="rgb(255,0,0)";
   gs.hudctx.lineWidth=10;
 
   gs.hudctx.beginPath();
@@ -386,8 +386,8 @@ function generatecourse()
 
   gs.offctx.clearRect(0, 0, gs.offcanvas.width, gs.offcanvas.height);
 
-  gs.offctx.fillStyle="rgba(0,255,0,1)";
-  gs.offctx.strokeStyle="rgba(0,255,0,1)";
+  gs.offctx.fillStyle="rgb(0,255,0)";
+  gs.offctx.strokeStyle="rgb(0,255,0)";
   gs.offctx.lineCap="round";
   gs.offctx.lineWidth=100;
 
@@ -409,8 +409,8 @@ function generatecourse()
   gs.offctx.stroke();
 
   // Draw tee
-  gs.offctx.fillStyle="rgba(255,0,0,1)";
-  gs.offctx.strokeStyle="rgba(255,0,0,1)";
+  gs.offctx.fillStyle="rgb(255,0,0)";
+  gs.offctx.strokeStyle="rgb(255,0,0)";
   gs.offctx.lineCap="round";
   gs.offctx.lineWidth=100;
 
@@ -419,8 +419,8 @@ function generatecourse()
   gs.offctx.fill();
 
   // Draw hole
-  gs.offctx.fillStyle="rgba(0,0,255,1)";
-  gs.offctx.strokeStyle="rgba(0,0,255,1)";
+  gs.offctx.fillStyle="rgb(0,0,255)";
+  gs.offctx.strokeStyle="rgb(0,0,255)";
   gs.offctx.lineCap="round";
   gs.offctx.lineWidth=100;
 
@@ -494,8 +494,8 @@ function startup()
   gs.canvas=document.getElementById('canvas');
   gs.ctx=gs.canvas.getContext('2d');
 
-  gs.ctx.fillStyle="rgba(255,255,255,1)";
-  gs.ctx.strokeStyle="rgba(255,255,255,1)";
+  gs.ctx.fillStyle="rgb(255,255,255)";
+  gs.ctx.strokeStyle="rgb(255,255,255)";
   gs.ctx.lineWidth=1;
 
   gs.offcanvas=document.createElement('canvas');
