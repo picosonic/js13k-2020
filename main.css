@@ -15,10 +15,9 @@ body
   overflow:hidden;
 }
 
-#canvas
+canvas
 {
   position:absolute;
-  background:#666;
   left:0px;
   top:0px;
   width:1280px;
@@ -36,22 +35,14 @@ body
   z-index:1;
 }
 
+#canvas
+{
+  background:#666;
+
+  z-index:1;
+}
+
 #hud
 {
-  position:absolute;
-  left:0px;
-  top:0px;
-  width:1280px;
-  height:720px;
-
-  padding:0px;
-  margin:0px;
-  overflow:hidden;
-
-  image-rendering:-moz-crisp-edges;
-  image-rendering:-webkit-crisp-edges;
-  image-rendering:pixelated;
-  image-rendering:crisp-edges;
-
   z-index:2;
 }
