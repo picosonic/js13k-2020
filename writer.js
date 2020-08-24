@@ -28,7 +28,7 @@ function write(ctx, x, y, text, size, style)
       for (var k=0; k<8; k++)
       {
         if (dual&(1<<(8-k)))
-          ctx.fillRect(x+(i*4*size)+(px*size), y+(size*py), Math.round(size), Math.round(size));
+          ctx.fillRect(Math.floor(x+(i*4*size)+(px*size)), Math.floor(y+(size*py)), Math.ceil(size), Math.ceil(size));
 
         px++;
         if (px==4)
