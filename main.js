@@ -132,7 +132,7 @@ function swingmeter()
   var point=32;
 
   // Draw the swing meter
-  gs.hudctx.strokeStyle="rgba(255,255,0,0.8)";
+  gs.hudctx.strokeStyle="rgba(255,255,255,0.8)";
   gs.hudctx.lineWidth=40;
 
   gs.hudctx.beginPath();
@@ -195,7 +195,7 @@ function render()
 
   gs.hudctx.clearRect(0, 0, gs.hudcanvas.width, gs.hudcanvas.height);
 
-  write(gs.hudctx, 10, 10, "Hole "+gs.hole, 5, "rgba(255,255,0,0.9)");
+  shadowwrite(gs.hudctx, 10, 10, "Hole "+gs.hole, 15, "rgba(255,255,0,0.9)");
 
   if (gs.swingstage>0)
     swingmeter();
@@ -377,17 +377,18 @@ function resize()
 
 function generatecourse()
 {
-  var numsegments=Math.floor(rng()*(gs.hole/6))+2;
+  var numsegments=Math.floor(rng()*(gs.hole/3))+14;
   var segment;
-  var x=0;
-  var y=0;
-  var lasty=0;
+  var x=50;
+  var y=10*(ymax/20);
+  var lasty=y;
+  var bias=0;
   var segments=[];
 
   gs.offctx.clearRect(0, 0, gs.offcanvas.width, gs.offcanvas.height);
 
-  gs.offctx.fillStyle="rgb(0,255,0)";
-  gs.offctx.strokeStyle="rgb(0,255,0)";
+  gs.offctx.fillStyle="rgb(0,128,0)";
+  gs.offctx.strokeStyle="rgb(0,128,0)";
   gs.offctx.lineCap="round";
   gs.offctx.lineWidth=100;
 
@@ -396,17 +397,23 @@ function generatecourse()
   // Calculate segments
   for (segment=0; segment<numsegments; segment++)
   {
-    x+=(xmax/10);
-    y=(Math.floor(rng()*(lasty==0?5:2))+(lasty==0?1:lasty))*(ymax/6);
+    x+=(xmax/20);
+    y=lasty+((Math.floor((rng()*2)+(rng()*bias)))*(ymax/20));
 
     segments.push({x:x, y:y});
+
+    gs.offctx.lineWidth=Math.floor(100+(rng()*100));
 
     if (segment==0)
       gs.offctx.moveTo(Math.floor(x), Math.floor(y));
     else
       gs.offctx.lineTo(Math.floor(x), Math.floor(y));
+
+    gs.offctx.stroke();
+
+    lasty=y;
+    bias=(lasty>y?1:-1);
   }
-  gs.offctx.stroke();
 
   // Draw tee
   gs.offctx.fillStyle="rgb(255,0,0)";
@@ -419,16 +426,14 @@ function generatecourse()
   gs.offctx.fill();
 
   // Draw hole
-  gs.offctx.fillStyle="rgb(0,0,255)";
-  gs.offctx.strokeStyle="rgb(0,0,255)";
+  gs.offctx.fillStyle="rgb(0,0,0)";
+  gs.offctx.strokeStyle="rgb(0,0,0)";
   gs.offctx.lineCap="round";
   gs.offctx.lineWidth=100;
 
   gs.offctx.beginPath();
   gs.offctx.arc(segments[segments.length-1].x, segments[segments.length-1].y, 10, 0, 2*Math.PI);
   gs.offctx.fill();
-
-  // Tee
 
   // Bend left or right
 
