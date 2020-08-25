@@ -81,6 +81,7 @@ var gs={
     {name:"Putter", dist:10, loft:4},
   ],
 
+  timeline:new timelineobj(),
   state:0 // 0=intro, 1=title, 2=ingame 3=completed
 };
 
@@ -97,8 +98,9 @@ function moveball()
   if (gs.ball.vy<gs.terminalvelocity)
     gs.ball.vy+=gs.gravity;
 
-  // Apply wind
-  gs.ball.vx+=gs.wind;
+  // Apply wind when off ground
+  if (gs.ball.y<ymax)
+    gs.ball.vx+=gs.wind;
 
   // Slow ball down by air resistance or friction
   if (gs.ball.vx>0)
@@ -107,6 +109,10 @@ function moveball()
       gs.ball.vx-=gs.airresistance;
     else
       gs.ball.vx-=gs.friction;
+
+    // Stop it going backwards
+    if (gs.ball.vx<0)
+      gs.ball.vx=0;
   }
 
   gs.ball.x+=gs.ball.vx;
@@ -554,7 +560,9 @@ function startup()
   generatecourse();
   window.requestAnimationFrame(rafcallback);
 
-  setInterval(function(){kick();}, 6000);
+  gs.timeline.reset();
+  gs.timeline.add(6000, function(){kick();});
+  gs.timeline.begin();
 }
 
 // Run the startup() once page has loaded
