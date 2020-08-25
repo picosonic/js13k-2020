@@ -86,3 +86,7 @@ Added 8bit font and writer for canvas. Filter out keyboard repeats. Reduced spee
 24th August
 -----------
 Improved pixel spacings of rendered text. Added scale/club max distance to swing meter. Reduced swing speed. Allow <0% and >100% on swing meter. Reset power/accuracy on each swing. Draw position of selected power on swing meter. Allow changing club. Show selected club name.
+
+25th August
+-----------
+Added writing text with shadow. More work on course generator. Added timeline library, which I've extended to include looping. Stop wind affecting ball when it's on the ground.
