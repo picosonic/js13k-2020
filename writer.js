@@ -43,3 +43,9 @@ function write(ctx, x, y, text, size, style)
 
   ctx.restore();
 }
+
+function shadowwrite(ctx, x, y, text, size, style)
+{
+  write(ctx, x+(size/2), y+(size/2), text, size, "rgba(64,64,64,0.5)");
+  write(ctx, x, y, text, size, style);
+}
