@@ -82,3 +82,7 @@ Did some research into different golf clubs including optimal distance and typic
 23rd August
 -----------
 Added 8bit font and writer for canvas. Filter out keyboard repeats. Reduced speed of failed power selection on swing meter.
+
+24th August
+-----------
+Improved pixel spacings of rendered text. Added scale/club max distance to swing meter. Reduced swing speed. Allow <0% and >100% on swing meter. Reset power/accuracy on each swing. Draw position of selected power on swing meter. Allow changing club. Show selected club name.
