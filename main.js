@@ -185,6 +185,35 @@ function swingmeter()
   gs.hudctx.stroke();
 }
 
+// Show wind direction and speed
+function windmeter()
+{
+  var cx=1200;
+  var cy=70;
+  var angle=(Date.now()/1000)%360;
+  var size=100;
+
+  gs.hudctx.fillStyle="rgba(255,255,255,0.2)";
+  gs.hudctx.strokeStyle="rgba(255,255,255,0.6)";
+
+  gs.hudctx.lineWidth=1;
+
+  gs.hudctx.fillRect(cx-(size/2), cy-(size/2), size, size);
+
+  gs.hudctx.fillStyle="rgba(255,255,255,0.6)";
+  gs.hudctx.strokeStyle="rgba(155,155,255,0.9)";
+
+  // Arrow
+  gs.hudctx.beginPath();
+  gs.hudctx.moveTo(cx+(40*Math.cos(angle)), cy+(40*Math.sin(angle)));
+  gs.hudctx.lineTo(cx+(40*Math.cos(angle-160)), cy+(40*Math.sin(angle-160)));
+  gs.hudctx.lineTo(cx+(40*Math.cos(angle+160)), cy+(40*Math.sin(angle+160)));
+  gs.hudctx.lineTo(cx+(40*Math.cos(angle)), cy+(40*Math.sin(angle)));
+  gs.hudctx.fill();
+
+  write(gs.hudctx, 1150, 140, Math.abs(gs.wind*1000).toFixed(0)+"mph", 3, "rgba(0,0,0,0.6)");
+}
+
 // Render the current scene
 function render()
 {
@@ -205,6 +234,8 @@ function render()
 
   if (gs.swingstage>0)
     swingmeter();
+
+  windmeter();
 }
 
 // Update step
@@ -562,7 +593,7 @@ function startup()
 
   gs.timeline.reset();
   gs.timeline.add(6000, function(){kick();});
-  gs.timeline.begin();
+  gs.timeline.begin(0);
 }
 
 // Run the startup() once page has loaded

@@ -90,3 +90,7 @@ Improved pixel spacings of rendered text. Added scale/club max distance to swing
 25th August
 -----------
 Added writing text with shadow. More work on course generator. Added timeline library, which I've extended to include looping. Stop wind affecting ball when it's on the ground.
+
+26th August
+-----------
+Added wind direction and speed indcators.
