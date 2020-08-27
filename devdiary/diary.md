@@ -94,3 +94,7 @@ Added writing text with shadow. More work on course generator. Added timeline li
 26th August
 -----------
 Added wind direction and speed indcators.
+
+27th August
+-----------
+Added golf ball 3D model.
