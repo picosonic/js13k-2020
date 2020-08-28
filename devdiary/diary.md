@@ -98,3 +98,7 @@ Added wind direction and speed indcators.
 27th August
 -----------
 Added golf ball 3D model.
+
+28th August
+-----------
+Added golf club 3D model.

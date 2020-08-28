@@ -11,3 +11,5 @@ JS13KGames entry for 2020, theme is "**404 THEME (NOT) FOUND**".
 * [YUI Compressor](https://github.com/yui/yuicompressor) JS/CSS compressor
 * [Google closure compiler](https://closure-compiler.appspot.com/home)
 * [advzip](https://github.com/amadvance/advancecomp) (uses [7-Zip](https://sourceforge.net/projects/sevenzip/files/7-Zip/) deflate to compress further)
+
+_Using some assets from [Kenney.nl "Minigolf Kit"](https://kenney.nl/assets/minigolf-kit) (Creative Commons Zero, CC0 license)_
