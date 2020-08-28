@@ -101,4 +101,4 @@ Added golf ball 3D model.
 
 28th August
 -----------
-Added golf club 3D model.
+Added golf club and golf flag 3D models based on kenney.nl models.
