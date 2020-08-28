@@ -28,6 +28,10 @@ var gs={
   hudcanvas:null,
   hudctx:null,
 
+  // Effects canvas
+  fxcanvas:null,
+  fxctx:null,
+
   // Swing meter
   swingstage:1, // 0=hidden, 1=idle, 2=power, 3=accuracy, 4=done
   swingpoint:0, // point within swing to draw paddle
@@ -82,6 +86,7 @@ var gs={
   ],
 
   timeline:new timelineobj(),
+  txttimeline:new timelineobj(),
   state:0 // 0=intro, 1=title, 2=ingame 3=completed
 };
 
@@ -310,6 +315,13 @@ function update()
 
       console.log("Power "+gs.swingpower+" Accuracy "+gs.swingaccuracy);
 
+      gs.txttimeline.reset();
+      gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); write(gs.fxctx, 610, 10,"Fore", 10, "rgb(255.0.255)");});
+      gs.txttimeline.add(1000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); write(gs.fxctx, 610, 10," Oh", 10, "rgb(255.0.255)");});
+      gs.txttimeline.add(2000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); write(gs.fxctx, 610, 10,"Fore!", 10, "rgb(255.0.255)");});
+      gs.txttimeline.add(3000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height);});
+      gs.txttimeline.begin(1);
+
       gs.swingstage=1; // TODO remove later
       break;
 
@@ -403,6 +415,13 @@ function resize()
 
   gs.canvas.style.transformOrigin='0 0';
   gs.canvas.style.transform='scale('+(width/xmax)+')';
+
+  // FX
+  gs.fxcanvas.style.top=top+"px";
+  gs.fxcanvas.style.left=left+"px";
+
+  gs.fxcanvas.style.transformOrigin='0 0';
+  gs.fxcanvas.style.transform='scale('+(width/xmax)+')';
 
   // HUD
   gs.hudcanvas.style.top=top+"px";
@@ -544,6 +563,11 @@ function startup()
   gs.offcanvas.width=xmax;
   gs.offcanvas.height=ymax;
   gs.offctx=gs.offcanvas.getContext('2d');
+
+  gs.fxcanvas=document.getElementById('fx');
+  gs.fxcanvas.width=xmax;
+  gs.fxcanvas.height=ymax;
+  gs.fxctx=gs.fxcanvas.getContext('2d');
 
   gs.hudcanvas=document.getElementById('hud');
   gs.hudcanvas.width=xmax;
