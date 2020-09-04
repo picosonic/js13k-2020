@@ -102,3 +102,15 @@ Added golf ball 3D model.
 28th August
 -----------
 Added golf club and golf flag 3D models based on kenney.nl models. Added "Fore Oh Fore" upon hit.
+
+2nd September
+-------------
+Decided each hole will be on an island and therefore is surrounded by a water hazard. Wind now has a 3D vector. Attempted to convert 2D generated course into 3D.
+
+3rd September
+-------------
+Added scoreboard.
+
+4th September
+-------------
+More work on scoreboard.
