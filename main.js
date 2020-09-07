@@ -20,8 +20,7 @@ var gs={
   friction:0.1,
   wind:{
     vx:0,
-    vy:0,
-    vz:0
+    vy:0
   },
 
   // Canvas object
@@ -54,15 +53,17 @@ var gs={
   strokes:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 
   ball:{
-    // Position
+    // Current position
     x:0,
-    y:ymax,
-    z:0,
+    y:0,
+
+    // Last position
+    lastx:0,
+    lasty:0,
 
     // Velocity
-    vx:4,
-    vy:-8,
-    vz:0
+    vx:0,
+    vy:0
   },
 
   course:{
@@ -173,7 +174,7 @@ function strokeresult(strokes, hole)
 // Check if the ball is currently moving
 function ballmoving()
 {
-  return ((gs.ball.vx!=0) || (gs.ball.vy!=0) || (gs.ball.vz!=0));
+  return ((Math.abs(gs.ball.vx)>0.04) || (Math.abs(gs.ball.vy)>0.04));
 }
 
 // Move the ball onwards
@@ -202,7 +203,6 @@ function moveball()
 
   gs.ball.x+=gs.ball.vx;
   gs.ball.y+=gs.ball.vy;
-  gs.ball.z+=gs.ball.vz;
 
   // Stop it going off screen
   if (gs.ball.x>xmax)
@@ -215,6 +215,13 @@ function moveball()
   {
     gs.ball.y=ymax;
     gs.ball.vy=-(gs.ball.vy*0.5);
+  }
+
+  // If ball moving a tiny bit - stop it
+  if (!ballmoving())
+  {
+    gs.ball.vx=0;
+    gs.ball.vy=0;
   }
 }
 
@@ -347,7 +354,7 @@ function windmeter()
   gs.hudctx.fillRect(cx-(size/2), cy-(size/2), size, size);
 
   gs.hudctx.fillStyle="rgba(255,255,255,0.6)";
-  gs.hudctx.strokeStyle="rgba(155,155,255,0.9)";
+  gs.hudctx.strokeStyle="rgba(5,5,255,0.9)";
 
   angle=Math.atan2(gs.wind.vy, gs.wind.vx)*180/Math.PI; // converted to degrees
   windspeed=Math.abs(Math.sqrt((gs.wind.vx*gs.wind.vx)+(gs.wind.vy*gs.wind.vy))*1000).toFixed(0);
@@ -359,6 +366,7 @@ function windmeter()
   gs.hudctx.lineTo(cx+(40*Math.cos(angle+160)), cy+(40*Math.sin(angle+160)));
   gs.hudctx.lineTo(cx+(40*Math.cos(angle)), cy+(40*Math.sin(angle)));
   gs.hudctx.fill();
+  gs.hudctx.stroke();
 
   write(gs.hudctx, 1150, 140, windspeed+"mph", 3, "rgba(255,255,255,0.7)");
 }
@@ -375,7 +383,7 @@ function showinfobox()
   gs.hudctx.fillStyle="rgba(255,255,255,0.2)";
   gs.hudctx.strokeStyle="rgba(255,255,255,0.6)";
 
-  gs.hudctx.lineWidth=1;
+  gs.hudctx.lineWidth=2;
 
   gs.hudctx.fillRect(cx, cy, 150, 155);
 
@@ -400,7 +408,7 @@ function showheading()
 
   gs.hudctx.save();
 
-  gs.hudctx.strokeStyle="rgba(255,140,0,0.6)";
+  gs.hudctx.strokeStyle="rgba(255,140,0,"+(((gs.lasttime%600))/600).toFixed(2)+")";
   gs.hudctx.lineWidth=10;
 
   ax=gs.course.segments[0].x;
@@ -410,6 +418,7 @@ function showheading()
   bx=ax+(distance*Math.cos((gs.heading-90)*PIOVER180));
   by=ay+(distance*Math.sin((gs.heading-90)*PIOVER180));
 
+  gs.hudctx.beginPath();
   gs.hudctx.moveTo(ax, ay);
   gs.hudctx.lineTo(bx, by);
 
@@ -524,12 +533,29 @@ function update()
     case 4: // Done - just show it on screen
       clearinputstate();
 
+      // Cache position when hit
+      gs.ball.lastx=gs.ball.x;
+      gs.ball.lasty=gs.ball.y;
+
+      // Determine heading
+      if (gs.swingpower>100) // If overhit randomise heading
+        gs.heading+=((rng()*5)-2.5);
+
+      // Determine loft
+      gs.ball.vy=-8*(gs.swingpower/70);
+
+      // Determine swing power
+      gs.ball.vx=4*(gs.swingpower/70);
+
+      gs.ball.x=0;
+      gs.ball.y=ymax;
+
       console.log("Power "+gs.swingpower+" Accuracy "+gs.swingaccuracy);
 
       gs.txttimeline.reset();
-      gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); write(gs.fxctx, 490, 200,"Fore", 20, "rgb(255,0,255)");});
-      gs.txttimeline.add(1000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); write(gs.fxctx, 490, 200," Oh", 20, "rgb(255,0,255)");});
-      gs.txttimeline.add(2000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); write(gs.fxctx, 490, 200,"Fore!", 20, "rgb(255,0,255)");});
+      gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); shadowwrite(gs.fxctx, 490, 200,"Fore", 20, "rgb(255,255,255)");});
+      gs.txttimeline.add(1000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); shadowwrite(gs.fxctx, 490, 200," Oh", 20, "rgb(255,255,255)");});
+      gs.txttimeline.add(2000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); shadowwrite(gs.fxctx, 490, 200,"Fore!", 20, "rgb(255,255,255)");});
       gs.txttimeline.add(3000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height);});
       gs.txttimeline.begin(1);
 
@@ -595,7 +621,7 @@ function update()
 function rafcallback(timestamp)
 {
   // Apparently gamepad support only now works via https
-  //   see https://hacks.mozilla.org/2020/06/securing-gamepad-api/
+  //   see https://hacks.mozilla.org/2020/07/securing-gamepad-api/
   if ((location.protocol=='https:') && (!!(navigator.getGamepads)))
     gamepadscan();
 
@@ -944,11 +970,9 @@ function kick()
 
   gs.ball.x=0;
   gs.ball.y=ymax;
-  gs.ball.z=0;
 
   gs.ball.vx=4;
   gs.ball.vy=-8;
-  gs.ball.vz=0;
 
   // Between -0.05 and +0.05
   gs.wind.vx=(rng()-0.5)*0.01;
@@ -970,14 +994,6 @@ function ispressed(keybit)
 // Startup called once when page is loaded
 function startup()
 {
-  // Test using RNG
-  // test it, to get a number between 0 and 7
-  // should give the sequence 5, 4, 1, 7 from startup
-  console.log(Math.floor(rng()*8));
-  console.log(Math.floor(rng()*8));
-  console.log(Math.floor(rng()*8));
-  console.log(Math.floor(rng()*8));
-
   gs.canvas=document.getElementById('canvas');
   gs.ctx=gs.canvas.getContext('2d');
 
