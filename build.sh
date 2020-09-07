@@ -42,7 +42,7 @@ rm "${jscat}" >/dev/null 2>&1
 zip -j "${zipfile}" "${buildpath}"/*
 
 # Re-Zip with advzip to save a bit more
-advzip -i 20 -k -z -4 "${zipfile}"
+advzip -i 200 -k -z -4 "${zipfile}"
 
 # Determine file sizes and compression
 unzip -lv "${zipfile}"
