@@ -70,6 +70,9 @@ var gs={
     numsegments:0
   },
 
+  // Heading - direction of travel for ball when hit
+  heading:90,
+
   // Selected club
   club:0,
 
@@ -390,6 +393,31 @@ function showinfobox()
   write(gs.hudctx, cx+15, cy+120, gs.clubs[gs.club].name, 3, "rgba(255,255,255,0.7)");
 }
 
+// Draw a line from ball position to target
+function showheading()
+{
+  var ax, bx, distance, ay, by;
+
+  gs.hudctx.save();
+
+  gs.hudctx.strokeStyle="rgba(255,140,0,0.6)";
+  gs.hudctx.lineWidth=10;
+
+  ax=gs.course.segments[0].x;
+  ay=gs.course.segments[0].y;
+
+  distance=gs.clubs[gs.club].dist/YARDSPERPIXEL;
+  bx=ax+(distance*Math.cos((gs.heading-90)*PIOVER180));
+  by=ay+(distance*Math.sin((gs.heading-90)*PIOVER180));
+
+  gs.hudctx.moveTo(ax, ay);
+  gs.hudctx.lineTo(bx, by);
+
+  gs.hudctx.stroke();
+
+  gs.hudctx.restore();
+}
+
 // Render the current scene
 function render()
 {
@@ -413,6 +441,8 @@ function render()
   else
   {
     shadowwrite(gs.hudctx, 520, 10, "Hole "+gs.hole, 10, "rgba(255,255,0,0.9)");
+
+    showheading();
 
     if (gs.swingstage>0)
       swingmeter();
@@ -512,7 +542,7 @@ function update()
       break;
   }
 
-  // Check for changing club
+  // Check for changing club and rotating heading
   if (gs.swingstage<2)
   {
     if (ispressed(2)) // Up
@@ -530,6 +560,23 @@ function update()
       if (gs.club<(gs.clubs.length-1))
         gs.club++;
     }
+
+    // Heading rotation
+    if (ispressed(1)) // Left
+    {
+      // Anti-clockwise
+      gs.heading-=0.1;
+    }
+    else
+    if (ispressed(4)) // Right
+    {
+      // Clockwise
+      gs.heading+=0.1;
+    }
+
+    // Normalise heading
+    if (gs.heading>=360) gs.heading-=360;
+    if (gs.heading<0) gs.heading=360-gs.heading;
   }
 
   // Scoreboard
@@ -994,9 +1041,9 @@ function startup()
   generatecourse();
   window.requestAnimationFrame(rafcallback);
 
-  gs.timeline.reset();
-  gs.timeline.add(6000, function(){kick();});
-  gs.timeline.begin(0);
+//  gs.timeline.reset();
+//  gs.timeline.add(6000, function(){kick();});
+//  gs.timeline.begin(0);
 }
 
 // Run the startup() once page has loaded
