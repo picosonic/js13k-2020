@@ -565,13 +565,13 @@ function update()
     if (ispressed(1)) // Left
     {
       // Anti-clockwise
-      gs.heading-=0.1;
+      gs.heading-=0.4;
     }
     else
     if (ispressed(4)) // Right
     {
       // Clockwise
-      gs.heading+=0.1;
+      gs.heading+=0.4;
     }
 
     // Normalise heading
