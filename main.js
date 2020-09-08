@@ -233,10 +233,23 @@ function moveball()
     gs.ballside.vx=0;
     gs.ballside.vy=0;
 
-    if (gs.swingstage==0) gs.swingstage=1;
+    // Check if it's over the hole
+    ax=Math.abs(gs.course.segments[gs.course.segments.length-1].x-gs.ballabove.x);
+    ay=Math.abs(gs.course.segments[gs.course.segments.length-1].y-gs.ballabove.y);
+    distance=Math.floor(Math.sqrt((ax*ax)+(ay*ay))*YARDSPERPIXEL);
+
+    if (gs.swingstage==0)
+    {
+      gs.swingstage=1;
+
+      if (distance<4)
+        nexthole();
+      else
+        gs.strokes[gs.hole-1]++;
+    }
   }
 
-  // When side ball is moving, also move todown ball
+  // When side ball is moving, also move top down ball
   if (ballmoving())
   {
     ax=gs.ballabove.lastx;
@@ -416,9 +429,9 @@ function showinfobox()
   gs.hudctx.fillStyle="rgba(255,255,255,0.6)";
   gs.hudctx.strokeStyle="rgba(155,155,255,0.9)";
 
-  // TODO calculate distance from ball not tee
-  dx=Math.abs(gs.course.segments[gs.course.segments.length-1].x-gs.course.segments[0].x);
-  dy=Math.abs(gs.course.segments[gs.course.segments.length-1].y-gs.course.segments[0].y);
+  // Calculate distance from ball to hole
+  dx=Math.abs(gs.course.segments[gs.course.segments.length-1].x-gs.ballabove.x);
+  dy=Math.abs(gs.course.segments[gs.course.segments.length-1].y-gs.ballabove.y);
   distance=Math.floor(Math.sqrt((dx*dx)+(dy*dy))*YARDSPERPIXEL);
 
   write(gs.hudctx, cx+15, cy+15, distance+" yds", 3, "rgba(255,255,255,0.7)");
@@ -584,8 +597,6 @@ function update()
       gs.ballside.x=0;
       gs.ballside.y=ymax;
 
-      console.log("Power "+gs.swingpower+" Accuracy "+gs.swingaccuracy);
-
       gs.txttimeline.reset();
       gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); shadowwrite(gs.fxctx, 490, 200,"Fore", 20, "rgb(255,255,255)");});
       gs.txttimeline.add(1000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); shadowwrite(gs.fxctx, 490, 200," Oh", 20, "rgb(255,255,255)");});
@@ -731,146 +742,6 @@ function resize()
   gs.hudcanvas.style.transform='scale('+(width/xmax)+')';
 }
 
-/*
-function oldgeneratecourse()
-{
-  var numsegments=Math.floor(rng()*(gs.hole/3))+14;
-  var segment;
-  var x=50;
-  var y=10*(ymax/20);
-  var w=100;
-  var lastx=x;
-  var lasty=y;
-  var bias=0;
-  var segments=[];
-
-  // Trig
-  var opp=0;
-  var adj=0;
-  var hyp=0;
-  var theta=0;
-
-  // 3D points
-  var x1, y1, x2, y2, x3, y3, x4, y4=0;
-
-  gs.offctx.clearRect(0, 0, gs.offcanvas.width, gs.offcanvas.height);
-
-  gs.offctx.fillStyle="rgb(0,128,0)";
-  gs.offctx.strokeStyle="rgb(0,128,0)";
-  gs.offctx.lineCap="round";
-  gs.offctx.lineWidth=w;
-
-  console.log("v 0 0 0");
-  console.log("v 0 0 0");
-
-  gs.offctx.beginPath();
-
-  // Calculate segments
-  for (segment=0; segment<numsegments; segment++)
-  {
-    x+=(xmax/20);
-    y=lasty+((Math.floor((rng()*2)+(rng()*bias)))*(ymax/20));
-
-    w=Math.floor(100+(rng()*100));
-w=200;
-    gs.offctx.lineWidth=w;
-
-    adj=x-lastx;
-    opp=y-lasty;
-    hyp=Math.sqrt((adj*adj)+(opp*opp));
-    theta=Math.atan2(opp, adj)*180/Math.PI; // converted to degrees
-
-    // x1,y1
-    x1=Math.floor(lastx+(w*Math.cos(PIOVER180*(90+theta))));
-    y1=Math.floor(lasty+(w*Math.sin(PIOVER180*(90+theta))));
-    // x2,y2
-    x2=Math.floor(lastx+(w*Math.cos(PIOVER180*(270+theta))));
-    y2=Math.floor(lasty+(w*Math.sin(PIOVER180*(270+theta))));
-    // x3,y3
-    x3=Math.floor(x+(w*Math.cos(PIOVER180*(90+theta))));
-    y3=Math.floor(y+(w*Math.sin(PIOVER180*(90+theta))));
-    // x4,y4
-    x4=Math.floor(x+(w*Math.cos(PIOVER180*(270+theta))));
-    y4=Math.floor(y+(w*Math.sin(PIOVER180*(270+theta))));
-
-    console.log("# ["+segment+"] x="+lastx+", y="+lasty+" -> x="+x+", y="+y+", w="+w);
-    console.log("# ["+segment+"] adj="+adj+" opp="+opp+" hyp="+hyp+" theta="+theta);
-
-//    console.log("v "+x1+" "+y1+" 0");
-//    console.log("v "+x2+" "+y2+" 0");
-    console.log("v "+x3+" "+y3+" 0");
-    console.log("v "+x4+" "+y4+" 0");
-
-    console.log("f -2 -1 -3");
-    console.log("f -2 -3 -4");
-
-    segments.push({x:x, y:y, w:w});
-
-    if (segment==0)
-      gs.offctx.moveTo(Math.floor(x), Math.floor(y));
-    else
-      gs.offctx.lineTo(Math.floor(x), Math.floor(y));
-
-    gs.offctx.stroke();
-
-    lastx=x;
-    lasty=y;
-    bias=(lasty>y?1:-1);
-  }
-
-  console.log("------------------------");
-
-  // Draw all segment centre points
-  for (segment=0; segment<numsegments; segment++)
-  {
-  gs.offctx.fillStyle="rgba(0,0,0,0.5)";
-  gs.offctx.strokeStyle="rgba(0,0,0,0.5)";
-  gs.offctx.lineCap="round";
-  gs.offctx.lineWidth=50;
-
-  gs.offctx.beginPath();
-  gs.offctx.arc(segments[segment].x, segments[segment].y, 10, 0, 2*Math.PI);
-  gs.offctx.fill();
-  }
-
-  // Draw tee
-  gs.offctx.fillStyle="rgb(255,0,0)";
-  gs.offctx.strokeStyle="rgb(255,0,0)";
-  gs.offctx.lineCap="round";
-  gs.offctx.lineWidth=100;
-
-  gs.offctx.beginPath();
-  gs.offctx.arc(segments[0].x, segments[0].y, 10, 0, 2*Math.PI);
-  gs.offctx.fill();
-
-  // Draw hole
-  gs.offctx.fillStyle="rgb(0,0,0)";
-  gs.offctx.strokeStyle="rgb(0,0,0)";
-  gs.offctx.lineCap="round";
-  gs.offctx.lineWidth=100;
-
-  gs.offctx.beginPath();
-  gs.offctx.arc(segments[segments.length-1].x, segments[segments.length-1].y, 10, 0, 2*Math.PI);
-  gs.offctx.fill();
-
-  // Bend left or right
-
-  // Length of course
-
-  // Width of course
-
-  // Green
-
-  // Rough
-
-  // Trees
-
-  // Other greenery edges
-
-  // Hazards - sand or water
-}
-*/
-
 function generatecourse()
 {
   var segment;
@@ -999,18 +870,12 @@ function generatecourse()
 }
 
 // Reset ball
-function kick()
+function nexthole()
 {
   gs.hole++;
   if (gs.hole>gs.holes) gs.hole=1;
 
   generatecourse();
-
-  gs.ballside.x=0;
-  gs.ballside.y=ymax;
-
-  gs.ballside.vx=4;
-  gs.ballside.vy=-8;
 
   // Between -0.05 and +0.05
   gs.wind.vx=(rng()-0.5)*0.01;
@@ -1094,10 +959,6 @@ function startup()
 
   generatecourse();
   window.requestAnimationFrame(rafcallback);
-
-//  gs.timeline.reset();
-//  gs.timeline.add(6000, function(){kick();});
-//  gs.timeline.begin(0);
 }
 
 // Run the startup() once page has loaded
