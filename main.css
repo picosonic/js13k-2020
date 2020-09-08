@@ -35,19 +35,24 @@ canvas
   z-index:1;
 }
 
-#canvas
+#course
 {
   background:#126;
 
   z-index:1;
 }
 
-#fx
+#canvas
 {
   z-index:2;
 }
 
-#hud
+#fx
 {
   z-index:3;
+}
+
+#hud
+{
+  z-index:4;
 }
