@@ -49,17 +49,25 @@ var gs={
   hole:1, // Current hole
   holes:18, // Total holes
 
-  par:[0,1,0,1,0,1,0,2,0,2,0,2,0,3,0,3,0,3],
+  par:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
   strokes:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 
-  ball:{
+  // Ball as shown on 2D course
+  ballabove:{
     // Current position
     x:0,
     y:0,
 
     // Last position
     lastx:0,
-    lasty:0,
+    lasty:0
+  },
+
+  // Ball as shown side on (with physics)
+  ballside:{
+    // Current position
+    x:0,
+    y:ymax,
 
     // Velocity
     vx:0,
@@ -174,56 +182,72 @@ function strokeresult(strokes, hole)
 // Check if the ball is currently moving
 function ballmoving()
 {
-  return ((Math.abs(gs.ball.vx)>0.04) || (Math.abs(gs.ball.vy)>0.04));
+  return ((Math.abs(gs.ballside.vx)>0.05) || (Math.abs(gs.ballside.vy)>0.05));
 }
 
 // Move the ball onwards
 function moveball()
 {
+  var ax, bx, distance, ay, by;
+
   // Apply gravity
-  if (gs.ball.vy<gs.terminalvelocity)
-    gs.ball.vy+=gs.gravity;
+  if (gs.ballside.vy<gs.terminalvelocity)
+    gs.ballside.vy+=gs.gravity;
 
   // Apply wind when off ground
-  if (gs.ball.y<ymax)
-    gs.ball.vx+=gs.wind.vx;
+  if (gs.ballside.y<ymax)
+    gs.ballside.vx+=gs.wind.vx;
 
   // Slow ball down by air resistance or friction
-  if (gs.ball.vx>0)
+  if (gs.ballside.vx>0)
   {
-    if (gs.ball.y<ymax)
-      gs.ball.vx-=gs.airresistance;
+    if (gs.ballside.y<ymax)
+      gs.ballside.vx-=gs.airresistance;
     else
-      gs.ball.vx-=gs.friction;
+      gs.ballside.vx-=gs.friction;
 
     // Stop it going backwards
-    if (gs.ball.vx<0)
-      gs.ball.vx=0;
+    if (gs.ballside.vx<0)
+      gs.ballside.vx=0;
   }
 
-  gs.ball.x+=gs.ball.vx;
-  gs.ball.y+=gs.ball.vy;
+  gs.ballside.x+=gs.ballside.vx;
+  gs.ballside.y+=gs.ballside.vy;
 
   // Stop it going off screen
-  if (gs.ball.x>xmax)
+  if (gs.ballside.x>xmax)
   {
-    gs.ball.x=xmax;
+    gs.ballside.x=xmax;
   }
 
   // When it hits the ground reverse to half it's vertical velocity
-  if (gs.ball.y>ymax)
+  if (gs.ballside.y>ymax)
   {
-    gs.ball.y=ymax;
-    gs.ball.vy=-(gs.ball.vy*0.5);
+    gs.ballside.y=ymax;
+    gs.ballside.vy=-(gs.ballside.vy*0.5);
   }
 
   // If ball is only moving a tiny bit - stop it
   if (!ballmoving())
   {
-    gs.ball.vx=0;
-    gs.ball.vy=0;
+    gs.ballside.vx=0;
+    gs.ballside.vy=0;
 
     if (gs.swingstage==0) gs.swingstage=1;
+  }
+
+  // When side ball is moving, also move todown ball
+  if (ballmoving())
+  {
+    ax=gs.ballabove.lastx;
+    ay=gs.ballabove.lasty;
+
+    distance=(gs.clubs[gs.club].dist/YARDSPERPIXEL)*(gs.ballside.x/xmax);
+    bx=ax+(distance*Math.cos((gs.heading-90)*PIOVER180));
+    by=ay+(distance*Math.sin((gs.heading-90)*PIOVER180));
+
+    gs.ballabove.x=bx;
+    gs.ballabove.y=by;
   }
 }
 
@@ -413,8 +437,8 @@ function showheading()
   gs.hudctx.strokeStyle="rgba(255,140,0,"+(((gs.lasttime%600))/600).toFixed(2)+")";
   gs.hudctx.lineWidth=10;
 
-  ax=gs.course.segments[0].x;
-  ay=gs.course.segments[0].y;
+  ax=gs.ballabove.x;
+  ay=gs.ballabove.y;
 
   distance=gs.clubs[gs.club].dist/YARDSPERPIXEL;
   bx=ax+(distance*Math.cos((gs.heading-90)*PIOVER180));
@@ -440,7 +464,7 @@ function render()
 
   // Draw the ball
   gs.ctx.beginPath();
-  gs.ctx.arc(Math.floor(gs.ball.x), Math.floor(gs.ball.y), 10, 0, 2*Math.PI);
+  gs.ctx.arc(Math.floor(gs.ballabove.x), Math.floor(gs.ballabove.y), 10+((1-(gs.ballside.y/ymax))*20), 0, 2*Math.PI);
   gs.ctx.fill();
 
   gs.hudctx.clearRect(0, 0, gs.hudcanvas.width, gs.hudcanvas.height);
@@ -453,7 +477,8 @@ function render()
   {
     shadowwrite(gs.hudctx, 520, 10, "Hole "+gs.hole, 10, "rgba(255,255,0,0.9)");
 
-    showheading();
+    if (!ballmoving())
+      showheading();
 
     if (gs.swingstage>0)
       swingmeter();
@@ -536,8 +561,8 @@ function update()
       clearinputstate();
 
       // Cache position when hit
-      gs.ball.lastx=gs.ball.x;
-      gs.ball.lasty=gs.ball.y;
+      gs.ballabove.lastx=gs.ballabove.x;
+      gs.ballabove.lasty=gs.ballabove.y;
 
       // Determine heading
       if (gs.swingaccuracy>5) // Hook
@@ -550,13 +575,14 @@ function update()
         gs.heading+=((rng()*5)-2.5);
 
       // Determine loft
-      gs.ball.vy=-8*(gs.swingpower/70);
+      gs.ballside.vy=-8*(gs.swingpower/70);
 
       // Determine swing power
-      gs.ball.vx=4*(gs.swingpower/70);
+      gs.ballside.vx=4*(gs.swingpower/70);
 
-      gs.ball.x=0;
-      gs.ball.y=ymax;
+      // Start side ball from bottom left
+      gs.ballside.x=0;
+      gs.ballside.y=ymax;
 
       console.log("Power "+gs.swingpower+" Accuracy "+gs.swingaccuracy);
 
@@ -923,6 +949,10 @@ function generatecourse()
     gs.offctx.fill();
   }
 
+  // Set initial ball position to be at tee
+  gs.ballabove.x=gs.course.segments[0].x;
+  gs.ballabove.y=gs.course.segments[0].y;
+
   // Draw tee
   gs.offctx.fillStyle="rgb(255,0,0)";
   gs.offctx.strokeStyle="rgb(255,0,0)";
@@ -976,11 +1006,11 @@ function kick()
 
   generatecourse();
 
-  gs.ball.x=0;
-  gs.ball.y=ymax;
+  gs.ballside.x=0;
+  gs.ballside.y=ymax;
 
-  gs.ball.vx=4;
-  gs.ball.vy=-8;
+  gs.ballside.vx=4;
+  gs.ballside.vy=-8;
 
   // Between -0.05 and +0.05
   gs.wind.vx=(rng()-0.5)*0.01;
