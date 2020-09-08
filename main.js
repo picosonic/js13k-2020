@@ -269,10 +269,10 @@ function moveball()
     {
       gs.swingstage=1;
 
+      gs.strokes[gs.hole-1]++;
+
       if (distance<3)
         nexthole();
-      else
-        gs.strokes[gs.hole-1]++;
     }
   }
 
