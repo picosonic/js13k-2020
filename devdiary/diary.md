@@ -118,3 +118,7 @@ More work on scoreboard.
 7th September
 -------------
 Centered course in view. Added stroke result text, e.g. Birdie/Bogey/Eagle/Hole-In-One, e.t.c. Cache generated course segments. Calculate par. Added info box. Make green visible. Show heading. Added rotation of heading. Add random heading change +/- 5% on overhit. Determine heading adjustments based on swingmeter. Hide swingmeter when struck.
+
+8th September
+-------------
+Ball position now separated into top down and side on views. Ball now moves on topdown course. Ball size adjusts when in flight. Detect ball going in (or very near hole) to move on to next course.
