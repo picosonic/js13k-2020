@@ -19,7 +19,7 @@ var gs={
   airresistance:0.00001,
   friction:0.1,
   wind:{
-    vx:0,
+    vx:(rng()-0.5)*0.01,
     vy:0
   },
 
@@ -217,11 +217,13 @@ function moveball()
     gs.ball.vy=-(gs.ball.vy*0.5);
   }
 
-  // If ball moving a tiny bit - stop it
+  // If ball is only moving a tiny bit - stop it
   if (!ballmoving())
   {
     gs.ball.vx=0;
     gs.ball.vy=0;
+
+    if (gs.swingstage==0) gs.swingstage=1;
   }
 }
 
@@ -538,7 +540,13 @@ function update()
       gs.ball.lasty=gs.ball.y;
 
       // Determine heading
-      if (gs.swingpower>100) // If overhit randomise heading
+      if (gs.swingaccuracy>5) // Hook
+        gs.heading+=(rng()*2.5);
+
+      if (gs.swingaccuracy<0) // Slice
+        gs.heading-=(rng()*2.5);
+
+      if (gs.swingpower>100) // If overhit randomise heading +/- 5%
         gs.heading+=((rng()*5)-2.5);
 
       // Determine loft
@@ -559,7 +567,7 @@ function update()
       gs.txttimeline.add(3000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height);});
       gs.txttimeline.begin(1);
 
-      gs.swingstage=1; // TODO remove later
+      gs.swingstage=0;
       break;
 
     default:
