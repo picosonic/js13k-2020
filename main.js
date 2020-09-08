@@ -502,7 +502,7 @@ function render()
   gs.ctx.clearRect(0, 0, gs.canvas.width, gs.canvas.height);
 
   // Copy the offscren canvas
-  gs.ctx.drawImage(gs.offcanvas, 0, 0);
+//  gs.ctx.drawImage(gs.offcanvas, 0, 0);
 
   // Draw the ball
   gs.ctx.beginPath();
@@ -749,6 +749,13 @@ function resize()
     top=Math.floor((window.innerHeight/2)-(height/2));
   }
 
+  // Course canvas
+  gs.offcanvas.style.top=top+"px";
+  gs.offcanvas.style.left=left+"px";
+
+  gs.offcanvas.style.transformOrigin='0 0';
+  gs.offcanvas.style.transform='scale('+(width/xmax)+')';
+
   // Play canvas
   gs.canvas.style.top=top+"px";
   gs.canvas.style.left=left+"px";
@@ -773,7 +780,7 @@ function resize()
 
 function generatecourses()
 {
-  var segment, x, y, w, lastx, lasty, bias, distance, dx, dy;
+  var x, y, w, lastx, lasty, bias, distance, dx, dy;
 
   for (var hole=0; hole<gs.holes; hole++)
   {
@@ -796,7 +803,7 @@ function generatecourses()
     x=(xmax/2)-((gs.courses[hole].numsegments*(xmax/20))/2);
 
     // Calculate segments
-    for (segment=0; segment<gs.courses[hole].numsegments; segment++)
+    for (var segment=0; segment<gs.courses[hole].numsegments; segment++)
     {
       x+=(xmax/20);
       y=lasty+((Math.floor((rng()*2)+(rng()*bias)))*(ymax/20));
@@ -837,7 +844,7 @@ function drawcourse(hole)
 
   // Draw border
   gs.offctx.beginPath();
-  for (segment=0; segment<gs.courses[hole].numsegments; segment++)
+  for (var segment=0; segment<gs.courses[hole].numsegments; segment++)
   {
     if (segment==0)
       gs.offctx.moveTo(Math.floor(gs.courses[hole].segments[segment].x), Math.floor(gs.courses[hole].segments[segment].y));
@@ -950,7 +957,7 @@ function startup()
   gs.ctx.strokeStyle="rgb(255,255,255)";
   gs.ctx.lineWidth=1;
 
-  gs.offcanvas=document.createElement('canvas');
+  gs.offcanvas=document.getElementById('course');
   gs.offcanvas.width=xmax;
   gs.offcanvas.height=ymax;
   gs.offctx=gs.offcanvas.getContext('2d');
