@@ -214,13 +214,42 @@ function moveball()
 
   // Stop it going off screen
   if (gs.ballside.x>xmax)
-  {
     gs.ballside.x=xmax;
-  }
 
   // When it hits the ground reverse to half it's vertical velocity
-  if (gs.ballside.y>ymax)
+  if ((ballmoving()) && (gs.ballside.y>ymax))
   {
+    if (gs.swingstage==0)
+    {
+      // Check what type of ground we hit
+      var imagedata=gs.offctx.getImageData(gs.ballabove.x, gs.ballabove.y, 1, 1).data;
+      if ((imagedata[0]==0) && (imagedata[1]==0) && (imagedata[2]==0) && (imagedata[3]==0))
+      {
+        // This is in the water, put ball back where it came from
+        gs.ballabove.x=gs.ballabove.lastx;
+        gs.ballabove.y=gs.ballabove.lasty;
+
+        // Stop ball moving
+        gs.ballside.vx=0;
+        gs.ballside.vy=0;
+
+        // Place physics ball at bottom corner
+        gs.ballside.x=0;
+        gs.ballside.y=ymax;
+
+        // Loose a stroke
+        gs.strokes[gs.hole-1]++;
+
+        // Sploosh message
+        gs.txttimeline.reset();
+        gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); shadowwrite(gs.fxctx, 390, 200,"Sploosh", 20, "rgb(255,255,255)");});
+        gs.txttimeline.add(500, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height);});
+        gs.txttimeline.begin(1);
+
+        return;
+      }
+    }
+
     gs.ballside.y=ymax;
     gs.ballside.vy=-(gs.ballside.vy*0.5);
   }
@@ -350,7 +379,8 @@ function scoreboard()
   {
     write(gs.hudctx, cx+(80*hole), cy, ""+(hole+1), 6, "rgba(255,255,255,0.9)");
     write(gs.hudctx, cx+(80*hole), cy+60, ""+(gs.par[hole]), 5, "rgba(255,128,128,0.9)");
-    write(gs.hudctx, cx+(80*hole), cy+120, ""+(gs.strokes[hole]), 5, "rgba(128,255,128,0.9)");
+    if (gs.hole-1>=hole)
+      write(gs.hudctx, cx+(80*hole), cy+120, ""+(gs.strokes[hole]), 5, "rgba(128,255,128,0.9)");
   }
 
   // Holes - Home
@@ -362,7 +392,8 @@ function scoreboard()
   {
     write(gs.hudctx, cx+(80*(hole-(gs.holes/2))), cy, ""+(hole+1), 6, "rgba(255,255,255,0.9)");
     write(gs.hudctx, cx+(80*(hole-(gs.holes/2))), cy+60, ""+(gs.par[hole]), 5, "rgba(255,128,128,0.9)");
-    write(gs.hudctx, cx+(80*(hole-(gs.holes/2))), cy+120, ""+(gs.strokes[hole]), 5, "rgba(128,255,128,0.9)");
+    if (gs.hole-1>=hole)
+      write(gs.hudctx, cx+(80*(hole-(gs.holes/2))), cy+120, ""+(gs.strokes[hole]), 5, "rgba(128,255,128,0.9)");
   }
 
   // Total
