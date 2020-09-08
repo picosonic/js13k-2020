@@ -74,10 +74,8 @@ var gs={
     vy:0
   },
 
-  course:{
-    segments:[],
-    numsegments:0
-  },
+  // Course data for all the holes
+  courses:[],
 
   // Heading - direction of travel for ball when hit
   heading:90,
@@ -234,15 +232,15 @@ function moveball()
     gs.ballside.vy=0;
 
     // Check if it's over the hole
-    ax=Math.abs(gs.course.segments[gs.course.segments.length-1].x-gs.ballabove.x);
-    ay=Math.abs(gs.course.segments[gs.course.segments.length-1].y-gs.ballabove.y);
+    ax=Math.abs(gs.courses[gs.hole-1].segments[gs.courses[gs.hole-1].segments.length-1].x-gs.ballabove.x);
+    ay=Math.abs(gs.courses[gs.hole-1].segments[gs.courses[gs.hole-1].segments.length-1].y-gs.ballabove.y);
     distance=Math.floor(Math.sqrt((ax*ax)+(ay*ay))*YARDSPERPIXEL);
 
     if (gs.swingstage==0)
     {
       gs.swingstage=1;
 
-      if (distance<4)
+      if (distance<3)
         nexthole();
       else
         gs.strokes[gs.hole-1]++;
@@ -430,8 +428,8 @@ function showinfobox()
   gs.hudctx.strokeStyle="rgba(155,155,255,0.9)";
 
   // Calculate distance from ball to hole
-  dx=Math.abs(gs.course.segments[gs.course.segments.length-1].x-gs.ballabove.x);
-  dy=Math.abs(gs.course.segments[gs.course.segments.length-1].y-gs.ballabove.y);
+  dx=Math.abs(gs.courses[gs.hole-1].segments[gs.courses[gs.hole-1].segments.length-1].x-gs.ballabove.x);
+  dy=Math.abs(gs.courses[gs.hole-1].segments[gs.courses[gs.hole-1].segments.length-1].y-gs.ballabove.y);
   distance=Math.floor(Math.sqrt((dx*dx)+(dy*dy))*YARDSPERPIXEL);
 
   write(gs.hudctx, cx+15, cy+15, distance+" yds", 3, "rgba(255,255,255,0.7)");
@@ -591,7 +589,7 @@ function update()
       gs.ballside.vy=-8*(gs.swingpower/70);
 
       // Determine swing power
-      gs.ballside.vx=4*(gs.swingpower/70);
+      gs.ballside.vx=2.5*(gs.swingpower/70);
 
       // Start side ball from bottom left
       gs.ballside.x=0;
@@ -742,69 +740,93 @@ function resize()
   gs.hudcanvas.style.transform='scale('+(width/xmax)+')';
 }
 
-function generatecourse()
+function generatecourses()
 {
-  var segment;
-  var x=0;
-  var y=10*(ymax/20);
-  var w=200;
-  var lastx=x;
-  var lasty=y;
-  var bias=0;
-  var distance=0;
-  var dx=0;
-  var dy=0;
+  var segment, x, y, w, lastx, lasty, bias, distance, dx, dy;
 
-  // Clear segments for hole
-  gs.course.segments=[];
-  gs.course.numsegments=Math.floor(rng()*(gs.hole/3))+13;
-
-  // Centre course in view
-  x=(xmax/2)-((gs.course.numsegments*(xmax/20))/2);
-
-  // Calculate segments
-  for (segment=0; segment<gs.course.numsegments; segment++)
+  for (var hole=0; hole<gs.holes; hole++)
   {
-    x+=(xmax/20);
-    y=lasty+((Math.floor((rng()*2)+(rng()*bias)))*(ymax/20));
-
-    gs.course.segments.push({x:x, y:y, w:w});
-
+    x=0;
+    y=10*(ymax/20);
+    w=200;
     lastx=x;
     lasty=y;
-    bias=(lasty>y?1:-1);
-  }
+    bias=0;
 
+    // Create data structue if needed
+    if (gs.courses[hole]==undefined)
+      gs.courses[hole]={segments:[], numsegments:0, w:w};
+
+    // Clear segments for hole
+    gs.courses[hole].segments=[];
+    gs.courses[hole].numsegments=Math.floor(rng()*(hole/3))+13;
+
+    // Centre course in view
+    x=(xmax/2)-((gs.courses[hole].numsegments*(xmax/20))/2);
+
+    // Calculate segments
+    for (segment=0; segment<gs.courses[hole].numsegments; segment++)
+    {
+      x+=(xmax/20);
+      y=lasty+((Math.floor((rng()*2)+(rng()*bias)))*(ymax/20));
+
+      gs.courses[hole].segments.push({x:x, y:y, w:w});
+
+      lastx=x;
+      lasty=y;
+      bias=(lasty>y?1:-1);
+    }
+
+    // Length of course
+    dx=Math.abs(gs.courses[hole].segments[gs.courses[hole].segments.length-1].x-gs.courses[hole].segments[0].x);
+    dy=Math.abs(gs.courses[hole].segments[gs.courses[hole].segments.length-1].y-gs.courses[hole].segments[0].y);
+    distance=Math.floor(Math.sqrt((dx*dx)+(dy*dy))*YARDSPERPIXEL);
+
+    // Calculate par
+    gs.par[hole]=calculatepar(distance);
+
+    // Rough
+
+    // Trees
+
+    // Other greenery edges
+
+    // Hazards - sand or water
+  }
+}
+
+function drawcourse(hole)
+{
   gs.offctx.clearRect(0, 0, gs.offcanvas.width, gs.offcanvas.height);
 
   gs.offctx.fillStyle="rgb(0,98,0)";
   gs.offctx.strokeStyle="rgb(0,98,0)";
   gs.offctx.lineCap="round";
-  gs.offctx.lineWidth=w*1.2;
+  gs.offctx.lineWidth=gs.courses[hole].w*1.2;
 
   // Draw border
   gs.offctx.beginPath();
-  for (segment=0; segment<gs.course.numsegments; segment++)
+  for (segment=0; segment<gs.courses[hole].numsegments; segment++)
   {
     if (segment==0)
-      gs.offctx.moveTo(Math.floor(gs.course.segments[segment].x), Math.floor(gs.course.segments[segment].y));
+      gs.offctx.moveTo(Math.floor(gs.courses[hole].segments[segment].x), Math.floor(gs.courses[hole].segments[segment].y));
     else
-      gs.offctx.lineTo(Math.floor(gs.course.segments[segment].x), Math.floor(gs.course.segments[segment].y));
+      gs.offctx.lineTo(Math.floor(gs.courses[hole].segments[segment].x), Math.floor(gs.courses[hole].segments[segment].y));
   }
   gs.offctx.stroke();
 
   // Draw fairway
   gs.offctx.fillStyle="rgb(0,128,0)";
   gs.offctx.strokeStyle="rgb(0,128,0)";
-  gs.offctx.lineWidth=w;
+  gs.offctx.lineWidth=gs.courses[hole].w;
 
   gs.offctx.beginPath();
-  for (segment=0; segment<gs.course.numsegments; segment++)
+  for (segment=0; segment<gs.courses[hole].numsegments; segment++)
   {
     if (segment==0)
-      gs.offctx.moveTo(Math.floor(gs.course.segments[segment].x), Math.floor(gs.course.segments[segment].y));
+      gs.offctx.moveTo(Math.floor(gs.courses[hole].segments[segment].x), Math.floor(gs.courses[hole].segments[segment].y));
     else
-      gs.offctx.lineTo(Math.floor(gs.course.segments[segment].x), Math.floor(gs.course.segments[segment].y));
+      gs.offctx.lineTo(Math.floor(gs.courses[hole].segments[segment].x), Math.floor(gs.courses[hole].segments[segment].y));
   }
   gs.offctx.stroke();
 
@@ -813,16 +835,12 @@ function generatecourse()
   gs.offctx.strokeStyle="rgba(0,0,0,0.05)";
   gs.offctx.lineWidth=50;
 
-  for (segment=0; segment<gs.course.numsegments; segment++)
+  for (segment=0; segment<gs.courses[hole].numsegments; segment++)
   {
     gs.offctx.beginPath();
-    gs.offctx.arc(gs.course.segments[segment].x, gs.course.segments[segment].y, 10, 0, 2*Math.PI);
+    gs.offctx.arc(gs.courses[hole].segments[segment].x, gs.courses[hole].segments[segment].y, 10, 0, 2*Math.PI);
     gs.offctx.fill();
   }
-
-  // Set initial ball position to be at tee
-  gs.ballabove.x=gs.course.segments[0].x;
-  gs.ballabove.y=gs.course.segments[0].y;
 
   // Draw tee
   gs.offctx.fillStyle="rgb(255,0,0)";
@@ -831,7 +849,7 @@ function generatecourse()
   gs.offctx.lineWidth=100;
 
   gs.offctx.beginPath();
-  gs.offctx.arc(gs.course.segments[0].x, gs.course.segments[0].y, 10, 0, 2*Math.PI);
+  gs.offctx.arc(gs.courses[hole].segments[0].x, gs.courses[hole].segments[0].y, 10, 0, 2*Math.PI);
   gs.offctx.fill();
 
   // Draw green
@@ -839,7 +857,7 @@ function generatecourse()
   gs.offctx.strokeStyle="rgb(0,180,0)";
 
   gs.offctx.beginPath();
-  gs.offctx.arc(gs.course.segments[gs.course.segments.length-1].x, gs.course.segments[gs.course.segments.length-1].y, w*0.2, 0, 2*Math.PI);
+  gs.offctx.arc(gs.courses[hole].segments[gs.courses[hole].segments.length-1].x, gs.courses[hole].segments[gs.courses[hole].segments.length-1].y, gs.courses[hole].w*0.2, 0, 2*Math.PI);
   gs.offctx.fill();
 
   // Draw hole
@@ -849,33 +867,30 @@ function generatecourse()
   gs.offctx.lineWidth=100;
 
   gs.offctx.beginPath();
-  gs.offctx.arc(gs.course.segments[gs.course.segments.length-1].x, gs.course.segments[gs.course.segments.length-1].y, 10, 0, 2*Math.PI);
+  gs.offctx.arc(gs.courses[hole].segments[gs.courses[hole].segments.length-1].x, gs.courses[hole].segments[gs.courses[hole].segments.length-1].y, 10, 0, 2*Math.PI);
   gs.offctx.fill();
 
-  // Length of course
-  dx=Math.abs(gs.course.segments[gs.course.segments.length-1].x-gs.course.segments[0].x);
-  dy=Math.abs(gs.course.segments[gs.course.segments.length-1].y-gs.course.segments[0].y);
-  distance=Math.floor(Math.sqrt((dx*dx)+(dy*dy))*YARDSPERPIXEL);
-
-  // Calculate par
-  gs.par[gs.hole-1]=calculatepar(distance);
-
-  // Rough
-
-  // Trees
-
-  // Other greenery edges
-
-  // Hazards - sand or water
+  // Set initial ball position to be at tee
+  gs.ballabove.x=gs.courses[hole].segments[0].x;
+  gs.ballabove.y=gs.courses[hole].segments[0].y;
 }
 
 // Reset ball
 function nexthole()
 {
   gs.hole++;
-  if (gs.hole>gs.holes) gs.hole=1;
+  if (gs.hole>gs.holes)
+  {
+    gs.hole=1;
+    // TODO END OF GAME
+  }
 
-  generatecourse();
+  // Draw the new course
+  drawcourse(gs.hole-1);
+
+  // Reset club to driver
+  gs.club=0;
+  gs.heading=90;
 
   // Between -0.05 and +0.05
   gs.wind.vx=(rng()-0.5)*0.01;
@@ -954,10 +969,15 @@ function startup()
     e.preventDefault();
   };
 
+  // Generate all the courses
+  generatecourses();
+
   // Put straight into game
   gs.state=2;
 
-  generatecourse();
+  // Draw current course
+  drawcourse(gs.hole-1);
+
   window.requestAnimationFrame(rafcallback);
 }
 
