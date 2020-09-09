@@ -115,7 +115,8 @@ var gs={
   timeline:new timelineobj(),
   txttimeline:new timelineobj(),
   showscoreboard:false,
-  state:0 // 0=intro, 1=title, 2=tee, 3=fore, 4=completed
+  state:0, // 0=intro, 1=title, 2=tee, 3=fore, 4=completed
+  music:false
 };
 
 // Calculate Par for hole
@@ -980,6 +981,12 @@ function startup()
     e = e || window.event;
 
     updatekeystate(e, 1);
+
+    if (gs.music==false)
+    {
+      gs.music=true;
+      music_play();
+    }
   };
 
   document.onkeyup=function(e)
@@ -999,6 +1006,12 @@ function startup()
   {
     keystate|=16;
     e.preventDefault();
+
+    if (gs.music==false)
+    {
+      gs.music=true;
+      music_play();
+    }
   };
 
   window.onmouseup=function(e)
