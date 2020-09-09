@@ -174,7 +174,7 @@ function strokeresult(hole)
       if (strokes==1)
         return "Hole In One";
       else
-        return ""+strokes+" strokes";
+        return ""+Math.abs(delta)+((delta>0)?" over":" under")+" par";
       break;
   }
 }
@@ -298,6 +298,9 @@ function moveball()
       gs.swingstage=1;
 
       gs.strokes[gs.hole-1]++;
+
+      // Change wind
+      gs.wind.vx=(rng()-0.5)*0.01;
 
       if (distance<2)
         nexthole();
