@@ -135,9 +135,10 @@ function calculatepar(distance)
 }
 
 // Convert strokes to score text
-function strokeresult(strokes, hole)
+function strokeresult(hole)
 {
-  var delta=gs.par[hole-1]-strokes;
+  var strokes=gs.strokes[hole-1];
+  var delta=strokes-gs.par[hole-1];
 
   switch (delta)
   {
@@ -217,6 +218,11 @@ function moveball()
   if (gs.ballside.x>xmax)
     gs.ballside.x=xmax;
 
+  // Determine distance from hole in yards
+  ax=Math.abs(gs.courses[gs.hole-1].segments[gs.courses[gs.hole-1].segments.length-1].x-gs.ballabove.x);
+  ay=Math.abs(gs.courses[gs.hole-1].segments[gs.courses[gs.hole-1].segments.length-1].y-gs.ballabove.y);
+  distance=Math.floor(Math.sqrt((ax*ax)+(ay*ay))*YARDSPERPIXEL);
+
   // When it hits the ground reverse to half it's vertical velocity
   if ((ballmoving()) && (gs.ballside.y>ymax))
   {
@@ -265,6 +271,15 @@ function moveball()
         gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); shadowwrite(gs.fxctx, 390, 200,"Sand Trap", 20, "rgb(194,178,128)");});
         gs.txttimeline.add(1000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height);});
         gs.txttimeline.begin(1);
+
+        return;
+      }
+
+      // Check if it has hit the hole, if so allow a "gimme"
+      if (distance<1)
+      {
+        gs.ballside.vx=0;
+        gs.ballside.vy=0;
       }
     }
 
@@ -277,11 +292,6 @@ function moveball()
   {
     gs.ballside.vx=0;
     gs.ballside.vy=0;
-
-    // Check if it's over the hole
-    ax=Math.abs(gs.courses[gs.hole-1].segments[gs.courses[gs.hole-1].segments.length-1].x-gs.ballabove.x);
-    ay=Math.abs(gs.courses[gs.hole-1].segments[gs.courses[gs.hole-1].segments.length-1].y-gs.ballabove.y);
-    distance=Math.floor(Math.sqrt((ax*ax)+(ay*ay))*YARDSPERPIXEL);
 
     if (gs.swingstage==0)
     {
@@ -1012,11 +1022,11 @@ function drawcourse(hole)
 // Reset ball
 function nexthole()
 {
-  var resulttxt=strokeresult(gs.strokes[gs.hole-1], gs.hole);
+  var resulttxt=strokeresult(gs.hole);
   gs.showscoreboard=true;
 
   gs.txttimeline.reset();
-  gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); gs.fxctx.fillStyle="rgba(0,0,0,0.6)"; gs.fxctx.fillRect(0, 0, gs.hudcanvas.width, gs.hudcanvas.height);shadowwrite(gs.fxctx, 390, 200,resulttxt, 20, "rgb(255,255,255)");});
+  gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); gs.fxctx.fillStyle="rgba(0,0,0,0.6)"; gs.fxctx.fillRect(0, 0, gs.hudcanvas.width, gs.hudcanvas.height);shadowwrite(gs.fxctx, (xmax/2)-((resulttxt.length/2)*(20*4)), 200,resulttxt, 20, "rgb(255,255,255)");});
   gs.txttimeline.add(2000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height);});
   gs.txttimeline.begin(1);
 
