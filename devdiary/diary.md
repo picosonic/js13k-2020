@@ -122,3 +122,7 @@ Centered course in view. Added stroke result text, e.g. Birdie/Bogey/Eagle/Hole-
 8th September
 -------------
 Ball position now separated into top down and side on views. Ball now moves on topdown course. Ball size adjusts when in flight. Detect ball going in (or very near hole) to move on to next course. Generate all holes at init. Separated generating and drawing of holes. Handle drop in water. Don't display scores on scoreboard for holes yet to play. Don't redraw course on every frame.
+
+9th September
+-------------
+Added music (may become annoying).
