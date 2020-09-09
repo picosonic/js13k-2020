@@ -16,7 +16,7 @@ function music_init()
     // Add volume control
     music.gainNode=music.audioCtx.createGain();
     music.gainNode.connect(music.audioCtx.destination);
-    music.gainNode.gain.setValueAtTime(0.003, music.audioCtx.currentTime);
+    music.gainNode.gain.setValueAtTime(0.012, music.audioCtx.currentTime);
 
     // Add audio panning
     music.panNode=music.audioCtx.createStereoPanner();
