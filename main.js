@@ -272,7 +272,7 @@ function moveball()
 
       gs.strokes[gs.hole-1]++;
 
-      if (distance<3)
+      if (distance<1)
         nexthole();
     }
   }
@@ -381,7 +381,7 @@ function scoreboard()
     write(gs.hudctx, cx+(80*hole), cy, ""+(hole+1), 6, "rgba(255,255,255,0.9)");
     write(gs.hudctx, cx+(80*hole), cy+60, ""+(gs.par[hole]), 5, "rgba(255,128,128,0.9)");
     if (gs.hole-1>=hole)
-      write(gs.hudctx, cx+(80*hole), cy+120, ""+(gs.strokes[hole]), 5, "rgba(128,255,128,0.9)");
+      write(gs.hudctx, cx+(80*hole), cy+120, gs.strokes[hole]==0?"-":""+(gs.strokes[hole]), 5, "rgba(128,255,128,0.9)");
   }
 
   // Holes - Home
@@ -394,7 +394,7 @@ function scoreboard()
     write(gs.hudctx, cx+(80*(hole-(gs.holes/2))), cy, ""+(hole+1), 6, "rgba(255,255,255,0.9)");
     write(gs.hudctx, cx+(80*(hole-(gs.holes/2))), cy+60, ""+(gs.par[hole]), 5, "rgba(255,128,128,0.9)");
     if (gs.hole-1>=hole)
-      write(gs.hudctx, cx+(80*(hole-(gs.holes/2))), cy+120, ""+(gs.strokes[hole]), 5, "rgba(128,255,128,0.9)");
+      write(gs.hudctx, cx+(80*(hole-(gs.holes/2))), cy+120, gs.strokes[hole]==0?"-":""+(gs.strokes[hole]), 5, "rgba(128,255,128,0.9)");
   }
 
   // Total
@@ -502,8 +502,14 @@ function render()
   // Clear the screen
   gs.ctx.clearRect(0, 0, gs.canvas.width, gs.canvas.height);
 
-  // Copy the offscren canvas
-//  gs.ctx.drawImage(gs.offcanvas, 0, 0);
+  // Draw the ball shadow
+  gs.ctx.save();
+  gs.ctx.fillStyle="rgba(0,0,0,0.2)";
+  gs.ctx.strokeStyle="rgba(0,0,0,0.2)";
+  gs.ctx.beginPath();
+  gs.ctx.arc(Math.floor(gs.ballabove.x)+10+((1-(gs.ballside.y/ymax))*20), Math.floor(gs.ballabove.y)+10+((1-(gs.ballside.y/ymax))*20), 10, 0, 2*Math.PI);
+  gs.ctx.fill();
+  gs.ctx.restore();
 
   // Draw the ball
   gs.ctx.beginPath();
@@ -845,16 +851,38 @@ function generatecourses()
 
 function drawcourse(hole)
 {
+  var segment=0;
+
   gs.offctx.clearRect(0, 0, gs.offcanvas.width, gs.offcanvas.height);
 
+  gs.offctx.lineCap="round";
+
+  // Draw outer border
+  gs.offctx.save();
+  gs.offctx.fillStyle="rgb(0,78,0)";
+  gs.offctx.strokeStyle="rgb(0,78,0)";
+  gs.offctx.shadowColor="rgba(0,0,0,0.1)";
+  gs.offctx.shadowOffsetX=15;
+  gs.offctx.shadowOffsetY=15;
+  gs.offctx.lineWidth=gs.courses[hole].w*1.25;
+  gs.offctx.beginPath();
+  for (segment=0; segment<gs.courses[hole].numsegments; segment++)
+  {
+    if (segment==0)
+      gs.offctx.moveTo(Math.floor(gs.courses[hole].segments[segment].x), Math.floor(gs.courses[hole].segments[segment].y));
+    else
+      gs.offctx.lineTo(Math.floor(gs.courses[hole].segments[segment].x), Math.floor(gs.courses[hole].segments[segment].y));
+  }
+  gs.offctx.stroke();
+
+  // Draw inner border
   gs.offctx.fillStyle="rgb(0,98,0)";
   gs.offctx.strokeStyle="rgb(0,98,0)";
-  gs.offctx.lineCap="round";
-  gs.offctx.lineWidth=gs.courses[hole].w*1.2;
-
-  // Draw border
+  gs.offctx.shadowOffsetX=5;
+  gs.offctx.shadowOffsetY=5;
+  gs.offctx.lineWidth=gs.courses[hole].w*1.15;
   gs.offctx.beginPath();
-  for (var segment=0; segment<gs.courses[hole].numsegments; segment++)
+  for (segment=0; segment<gs.courses[hole].numsegments; segment++)
   {
     if (segment==0)
       gs.offctx.moveTo(Math.floor(gs.courses[hole].segments[segment].x), Math.floor(gs.courses[hole].segments[segment].y));
@@ -877,6 +905,7 @@ function drawcourse(hole)
       gs.offctx.lineTo(Math.floor(gs.courses[hole].segments[segment].x), Math.floor(gs.courses[hole].segments[segment].y));
   }
   gs.offctx.stroke();
+  gs.offctx.restore();
 
   // Draw all segment centre points
   gs.offctx.fillStyle="rgba(0,0,0,0.05)";
@@ -926,6 +955,8 @@ function drawcourse(hole)
 // Reset ball
 function nexthole()
 {
+  gs.showscoreboard=true;
+
   gs.hole++;
   if (gs.hole>gs.holes)
   {
