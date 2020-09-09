@@ -244,10 +244,27 @@ function moveball()
         // Sploosh message
         gs.txttimeline.reset();
         gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); shadowwrite(gs.fxctx, 390, 200,"Sploosh", 20, "rgb(135,206,235)");});
-        gs.txttimeline.add(500, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height);});
+        gs.txttimeline.add(1000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height);});
         gs.txttimeline.begin(1);
 
         return;
+      }
+      else
+      if ((imagedata[0]==194) && (imagedata[1]==178) && (imagedata[2]==128))
+      {
+        // Stop ball moving
+        gs.ballside.vx=0;
+        gs.ballside.vy=0;
+
+        // Place physics ball at bottom corner
+        gs.ballside.x=0;
+        gs.ballside.y=ymax;
+
+        // Sand message
+        gs.txttimeline.reset();
+        gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); shadowwrite(gs.fxctx, 390, 200,"Sand Trap", 20, "rgb(194,178,128)");});
+        gs.txttimeline.add(1000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height);});
+        gs.txttimeline.begin(1);
       }
     }
 
@@ -272,7 +289,7 @@ function moveball()
 
       gs.strokes[gs.hole-1]++;
 
-      if (distance<1)
+      if (distance<2)
         nexthole();
     }
   }
@@ -618,7 +635,7 @@ function update()
       }
       break;
 
-    case 4: // Done - just show it on screen
+    case 4: // Done - strike the ball
       clearinputstate();
 
       // Cache position when hit
@@ -633,13 +650,24 @@ function update()
         gs.heading-=(rng()*2.5);
 
       if (gs.swingpower>100) // If overhit randomise heading +/- 5%
-        gs.heading+=((rng()*5)-2.5);
+        gs.heading+=((rng()*10)-5);
+
+      // Determine swing power
+      gs.ballside.vx=2.5*(gs.swingpower/70);
 
       // Determine loft
       gs.ballside.vy=-8*(gs.swingpower/70);
 
-      // Determine swing power
-      gs.ballside.vx=2.5*(gs.swingpower/70);
+      // If we're in sand, then further randomise some values
+      var imagedata=gs.offctx.getImageData(gs.ballabove.x, gs.ballabove.y, 1, 1).data;
+      if ((imagedata[0]==194) && (imagedata[1]==178) && (imagedata[2]==128))
+      {
+        // Alter heading by up to +/- 10%
+        gs.heading+=((rng()*20)-10);
+
+        // Reduce horizontal power
+        gs.ballside.vx*=(0.5-(rng()*0.25));
+      }
 
       // Start side ball from bottom left
       gs.ballside.x=0;
@@ -838,14 +866,6 @@ function generatecourses()
 
     // Calculate par
     gs.par[hole]=calculatepar(distance);
-
-    // Rough
-
-    // Trees
-
-    // Other greenery edges
-
-    // Hazards - sand or water
   }
 }
 
@@ -947,6 +967,43 @@ function drawcourse(hole)
   gs.offctx.arc(gs.courses[hole].segments[gs.courses[hole].segments.length-1].x, gs.courses[hole].segments[gs.courses[hole].segments.length-1].y, 10, 0, 2*Math.PI);
   gs.offctx.fill();
 
+  // Draw flag
+  gs.offctx.fillStyle="rgb(255,255,255)";
+  gs.offctx.strokeStyle="rgb(255,255,255)";
+  gs.offctx.lineCap="square";
+  gs.offctx.lineWidth=5;
+
+  var holex=gs.courses[hole].segments[gs.courses[hole].segments.length-1].x;
+  var holey=gs.courses[hole].segments[gs.courses[hole].segments.length-1].y;
+
+  gs.offctx.beginPath();
+  gs.offctx.moveTo(holex, holey);
+  gs.offctx.lineTo(holex, holey-20);
+  gs.offctx.stroke();
+
+  gs.offctx.fillStyle="rgb(255,0,0)";
+  gs.offctx.strokeStyle="rgb(255,0,0)";
+  gs.offctx.beginPath();
+  gs.offctx.moveTo(holex, holey-20);
+  gs.offctx.lineTo(holex+8, holey-22.5);
+  gs.offctx.lineTo(holex, holey-25);
+  gs.offctx.closePath();
+  gs.offctx.fill();
+  gs.offctx.stroke();
+
+  // Add random sand trap
+  if (rng()<0.66)
+  {
+    gs.offctx.fillStyle="rgb(194,178,128)";
+    gs.offctx.strokeStyle="rgb(194,178,128)";
+    gs.offctx.lineCap="round";
+    gs.offctx.lineWidth=100;
+
+    gs.offctx.beginPath();
+    gs.offctx.arc(gs.courses[hole].segments[gs.courses[hole].segments.length-2].x, gs.courses[hole].segments[gs.courses[hole].segments.length-2].y, 20+(rng()*10), 0, 2*Math.PI);
+    gs.offctx.fill();
+  }
+
   // Set initial ball position to be at tee
   gs.ballabove.x=gs.courses[hole].segments[0].x;
   gs.ballabove.y=gs.courses[hole].segments[0].y;
@@ -955,7 +1012,13 @@ function drawcourse(hole)
 // Reset ball
 function nexthole()
 {
+  var resulttxt=strokeresult(gs.strokes[gs.hole-1], gs.hole);
   gs.showscoreboard=true;
+
+  gs.txttimeline.reset();
+  gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); gs.fxctx.fillStyle="rgba(0,0,0,0.6)"; gs.fxctx.fillRect(0, 0, gs.hudcanvas.width, gs.hudcanvas.height);shadowwrite(gs.fxctx, 390, 200,resulttxt, 20, "rgb(255,255,255)");});
+  gs.txttimeline.add(2000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height);});
+  gs.txttimeline.begin(1);
 
   gs.hole++;
   if (gs.hole>gs.holes)
