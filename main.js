@@ -644,7 +644,7 @@ function update()
   }
 
   // Check for changing club and rotating heading
-  if (gs.swingstage<2)
+  if (gs.swingstage==1)
   {
     if (ispressed(2)) // Up
     {
