@@ -243,7 +243,7 @@ function moveball()
 
         // Sploosh message
         gs.txttimeline.reset();
-        gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); shadowwrite(gs.fxctx, 390, 200,"Sploosh", 20, "rgb(255,255,255)");});
+        gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); shadowwrite(gs.fxctx, 390, 200,"Sploosh", 20, "rgb(135,206,235)");});
         gs.txttimeline.add(500, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height);});
         gs.txttimeline.begin(1);
 
@@ -535,9 +535,21 @@ function render()
 // Update step
 function update()
 {
+  if (gs.showscoreboard)
+  {
+    if ((ispressed(256)) // S
+      || (ispressed(16))) // Action
+    {
+      clearinputstate();
+
+      gs.showscoreboard=false;
+    }
+
+    return;
+  }
+
   // Move the ball
-  if (!gs.showscoreboard)
-    moveball();
+  moveball();
 
   // Check for swing meter
   switch (gs.swingstage)
@@ -666,13 +678,13 @@ function update()
     if (ispressed(1)) // Left
     {
       // Anti-clockwise
-      gs.heading-=0.4;
+      gs.heading-=0.8;
     }
     else
     if (ispressed(4)) // Right
     {
       // Clockwise
-      gs.heading+=0.4;
+      gs.heading+=0.8;
     }
 
     // Normalise heading
@@ -685,10 +697,7 @@ function update()
   {
     clearinputstate();
 
-    if (gs.showscoreboard)
-      gs.showscoreboard=false;
-    else
-      gs.showscoreboard=true;
+    gs.showscoreboard=true;
   }
 }
 
