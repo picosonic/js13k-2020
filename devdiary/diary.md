@@ -125,4 +125,4 @@ Ball position now separated into top down and side on views. Ball now moves on t
 
 9th September
 -------------
-Added music (may become annoying). Double heading rotation speed. Don't allow swing meter interaction whilst scoreboard is showing.
+Added music (may become annoying). Double heading rotation speed. Don't allow swing meter interaction whilst scoreboard is showing. Added terrain and ball shadows.
