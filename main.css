@@ -47,12 +47,12 @@ canvas
   z-index:2;
 }
 
-#fx
+#hud
 {
   z-index:3;
 }
 
-#hud
+#fx
 {
   z-index:4;
 }
