@@ -24,7 +24,6 @@ JS13KGames entry for 2020, theme is "**404 THEME (NOT) FOUND**".
 * [advzip](https://github.com/amadvance/advancecomp) (uses [7-Zip](https://sourceforge.net/projects/sevenzip/files/7-Zip/) deflate to compress further)
 
 _Using some assets from [Kenney.nl "Minigolf Kit"](https://kenney.nl/assets/minigolf-kit) (Creative Commons Zero, CC0 license)_
-
 _Using "The Chrysanthemum" by Scott Joplin (in the public domain since it was published in 1904 - before 1924)_
-
 _Using "Black & White Rag" by George Botsford (in the public domain since it was published in 1908 - before 1924)_
+_Using code inspired by following a [tutorial](https://www.youtube.com/watch?v=XgMWc6LumG4) from @Javidx9_

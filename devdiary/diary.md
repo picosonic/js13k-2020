@@ -126,3 +126,7 @@ Ball position now separated into top down and side on views. Ball now moves on t
 9th September
 -------------
 Added music (may become annoying). Double heading rotation speed. Don't allow swing meter interaction whilst scoreboard is showing. Added terrain and ball shadows. Added flag and sand traps. Allow ball to plop into hole rather than only rolling in. Change wind direction between each shot. Title screen and game states. Mouse wheel rotates heading.
+
+10th September
+--------------
+Added a second piece of music to break the monotony. Testing gamepads (felt cute might remove later). Added 3D engine code inspired by a [tutorial](https://www.youtube.com/watch?v=XgMWc6LumG4) from Javidx9.
