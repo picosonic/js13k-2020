@@ -16,6 +16,8 @@ function gamepadscan()
   var gdown=false;
   var gjump=false;
 
+  var padcache=padstate;
+
   for (var padid=0; padid<gamepads.length; padid++)
   {
     // Only support first found gamepad
@@ -181,12 +183,18 @@ function gamepadscan()
 
       // Update padstate
       if (gup)
-        padstate|=2;
+      {
+        if (padcache&2==0)
+          padstate|=2;
+      }
       else
         padstate&=~2;
 
       if (gdown)
-        padstate|=8;
+      {
+        if (padcache&8==0)
+          padstate|=8;
+      }
       else
         padstate&=~8;
 
@@ -201,7 +209,10 @@ function gamepadscan()
         padstate&=~4;
 
       if (gjump)
-        padstate|=16;
+      {
+        if (padcache&16==0)
+          padstate|=16;
+      }
       else
         padstate&=~16;
     }
