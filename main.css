@@ -37,7 +37,8 @@ canvas
 
 #course
 {
-  background:#126;
+  background:rgb(17,34,102);
+  background:radial-gradient(circle, rgba(17,34,102,1) 35%, rgba(3,17,75,1) 100%);
 
   z-index:1;
 }
