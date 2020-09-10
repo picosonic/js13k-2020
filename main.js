@@ -625,6 +625,9 @@ function update()
       {
         clearinputstate();
 
+        // Stop the 3D renderer
+        gsthreedee.stop();
+
         // Start game
         gs.state=1;
 
@@ -648,6 +651,7 @@ function update()
         clearinputstate();
 
         // Return to title screen
+        gsthreedee.start();
         gs.state=0;
       }
       else
@@ -655,6 +659,7 @@ function update()
       break;
 
     default:
+      gsthreedee.start();
       gs.state=0;
       break;
   }
@@ -917,6 +922,13 @@ function resize()
 
   gs.hudcanvas.style.transformOrigin='0 0';
   gs.hudcanvas.style.transform='scale('+(width/xmax)+')';
+
+  // 3D
+  gs.d3canvas.style.top=top+"px";
+  gs.d3canvas.style.left=left+"px";
+
+  gs.d3canvas.style.transformOrigin='0 0';
+  gs.d3canvas.style.transform='scale('+(width/xmax)+')';
 }
 
 function generatecourses()
@@ -1173,6 +1185,11 @@ function startup()
   gs.hudcanvas.height=ymax;
   gs.hudctx=gs.hudcanvas.getContext('2d');
 
+  gs.d3canvas=document.getElementById('threedee');
+  gs.d3canvas.width=xmax;
+  gs.d3canvas.height=ymax;
+  gs.d3ctx=gs.d3canvas.getContext('2d');
+
   resize();
   window.addEventListener("resize", resize);
 
@@ -1230,6 +1247,10 @@ function startup()
   generatecourses();
 
   window.requestAnimationFrame(rafcallback);
+
+  // Initialise 3D engine
+  threedeeinit();
+  gsthreedee.start();
 }
 
 // Run the startup() once page has loaded

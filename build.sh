@@ -12,7 +12,7 @@ mkdir "${buildpath}"
 
 # Concatenate the JS files
 touch "${jscat}" >/dev/null 2>&1
-for file in "wichmann-hill_rng.js" "font.js" "writer.js" "gamepad.js" "keyboard.js" "timeline.js" "models.js" "music.js" "main.js"
+for file in "wichmann-hill_rng.js" "font.js" "writer.js" "gamepad.js" "keyboard.js" "timeline.js" "models.js" "music.js" "threedee.js" "main.js"
 do
   cat "${file}" >> "${jscat}"
 done
