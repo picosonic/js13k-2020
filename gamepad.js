@@ -183,7 +183,7 @@ function gamepadscan()
       // Update padstate
       if (gup)
       {
-        if (padcache&2==0)
+        if ((padcache&2)==0)
           padstate|=2;
       }
       else
@@ -191,7 +191,7 @@ function gamepadscan()
 
       if (gdown)
       {
-        if (padcache&8==0)
+        if ((padcache&8)==0)
           padstate|=8;
       }
       else
@@ -209,7 +209,7 @@ function gamepadscan()
 
       if (gjump)
       {
-        if (padcache&16==0)
+        if ((padcache&16)==0)
           padstate|=16;
       }
       else
