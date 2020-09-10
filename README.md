@@ -3,6 +3,18 @@ JS13KGames entry for 2020, theme is "**404 THEME (NOT) FOUND**".
 
 ## Coding Golf - Broken Links
 
+![Coding Golf - Broken Links](big_screenshot.png?raw=true "Coding Golf - Broken Links")
+
+With planet Figadore ravaged by the Regulith virus, all sporting events have been cancelled. Determined to play a round of golf, Fred sneaks on to the "Coding Golf" island golfcourse where he works, to play a game.
+
+Your mission is to help Fred get the lowest score possible on each hole so that he can win the "Broken Links" championship trophy.
+
+Use the left/right cursor keys to rotate the direction the ball will be struck in, then select a golf club using the up/down arrows to adjust the range. Once you're happy, press SPACE/ENTER to start the swing meter. Then pressing SPACE/ENTER a second time will select a strike power (as a percentage), the meter will now move back towards 0. You then need to press SPACE/ENTER a final time as close to 0 as you can to prevent a hooked or sliced shot.
+
+Alternatively you can use a mouse to play, scroll wheel will rotate the ball direction, then click for each step of the swing meter operation.
+
+A scoreboard is shown after each hole is completed. There are 18 holes in total.
+
 # Stuff I managed to add
 * 2D top down golf game
 * Full screen, but landscape with target 720p
