@@ -1,4 +1,5 @@
 var padstate=0;
+var padcache=0;
 var gamepad=-1;
 var gamepadbuttons=[]; // Button mapping
 var gamepadaxes=[0, 0, 0, 0, 0]; // Axes mapping
@@ -15,8 +16,6 @@ function gamepadscan()
   var gup=false;
   var gdown=false;
   var gjump=false;
-
-  var padcache=padstate;
 
   for (var padid=0; padid<gamepads.length; padid++)
   {
@@ -217,6 +216,8 @@ function gamepadscan()
         padstate&=~16;
     }
   }
+
+  padcache=padstate;
 
   // Detect disconnect
   if ((found==0) && (gamepad!=-1))
