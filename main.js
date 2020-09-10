@@ -115,7 +115,7 @@ var gs={
   timeline:new timelineobj(),
   txttimeline:new timelineobj(),
   showscoreboard:false,
-  state:0, // 0=intro, 1=title, 2=tee, 3=fore, 4=completed
+  state:0, // 0=title, 1=playing, 2=completed
   music:false
 };
 
@@ -529,48 +529,136 @@ function showheading()
 // Render the current scene
 function render()
 {
-  // Clear the screen
-  gs.ctx.clearRect(0, 0, gs.canvas.width, gs.canvas.height);
-
-  // Draw the ball shadow
-  gs.ctx.save();
-  gs.ctx.fillStyle="rgba(0,0,0,0.2)";
-  gs.ctx.strokeStyle="rgba(0,0,0,0.2)";
-  gs.ctx.beginPath();
-  gs.ctx.arc(Math.floor(gs.ballabove.x)+10+((1-(gs.ballside.y/ymax))*20), Math.floor(gs.ballabove.y)+10+((1-(gs.ballside.y/ymax))*20), 10, 0, 2*Math.PI);
-  gs.ctx.fill();
-  gs.ctx.restore();
-
-  // Draw the ball
-  gs.ctx.beginPath();
-  gs.ctx.arc(Math.floor(gs.ballabove.x), Math.floor(gs.ballabove.y), 10+((1-(gs.ballside.y/ymax))*20), 0, 2*Math.PI);
-  gs.ctx.fill();
-
-  gs.hudctx.clearRect(0, 0, gs.hudcanvas.width, gs.hudcanvas.height);
-
-  if (gs.showscoreboard)
+  switch (gs.state)
   {
-    scoreboard();
+    case 0: // Title
+      // Clear the screen
+      gs.ctx.clearRect(0, 0, gs.canvas.width, gs.canvas.height);
+      gs.offctx.clearRect(0, 0, gs.canvas.width, gs.canvas.height);
+
+      gs.hudctx.save();
+      gs.hudctx.clearRect(0, 0, gs.canvas.width, gs.canvas.height);
+      shadowwrite(gs.hudctx, 200, 20, "Coding Go f", 20, "rgba(255,255,255,0.9)");
+      shadowwrite(gs.hudctx, 400, 200, "Broken Links", 10, "rgba(255,255,0,0.9)");
+      shadowwrite(gs.hudctx, 180, 650, "Press Space/Enter/Gamepad/Mouse to play", 6, "rgba(255,255,0,"+(((gs.lasttime%1200))/1200).toFixed(2)+")");
+
+      gs.hudctx.fillStyle="rgb(255,255,255)";
+      gs.hudctx.strokeStyle="rgb(255,255,255)";
+      gs.hudctx.lineCap="square";
+      gs.hudctx.lineWidth=15;
+
+      var holex=960;
+      var holey=155;
+
+      gs.hudctx.beginPath();
+      gs.hudctx.moveTo(holex, holey);
+      gs.hudctx.lineTo(holex, holey-110);
+      gs.hudctx.stroke();
+
+      gs.hudctx.fillStyle="rgb(255,0,0)";
+      gs.hudctx.strokeStyle="rgb(255,0,0)";
+      gs.hudctx.beginPath();
+      gs.hudctx.moveTo(holex+7, holey-90);
+      gs.hudctx.lineTo(holex+24, holey-97.5);
+      gs.hudctx.lineTo(holex+7, holey-105);
+      gs.hudctx.closePath();
+      gs.hudctx.fill();
+      gs.hudctx.stroke();
+      gs.hudctx.restore();
+      break;
+
+    case 1: // In game
+    case 2: // Completed
+      // Clear the screen
+      gs.ctx.clearRect(0, 0, gs.canvas.width, gs.canvas.height);
+
+      // Draw the ball shadow
+      gs.ctx.save();
+      gs.ctx.fillStyle="rgba(0,0,0,0.2)";
+      gs.ctx.strokeStyle="rgba(0,0,0,0.2)";
+      gs.ctx.beginPath();
+      gs.ctx.arc(Math.floor(gs.ballabove.x)+10+((1-(gs.ballside.y/ymax))*20), Math.floor(gs.ballabove.y)+10+((1-(gs.ballside.y/ymax))*20), 10, 0, 2*Math.PI);
+      gs.ctx.fill();
+      gs.ctx.restore();
+
+      // Draw the ball
+      gs.ctx.beginPath();
+      gs.ctx.arc(Math.floor(gs.ballabove.x), Math.floor(gs.ballabove.y), 10+((1-(gs.ballside.y/ymax))*20), 0, 2*Math.PI);
+      gs.ctx.fill();
+
+      gs.hudctx.clearRect(0, 0, gs.hudcanvas.width, gs.hudcanvas.height);
+
+      if (gs.showscoreboard)
+      {
+        scoreboard();
+      }
+      else
+      {
+        shadowwrite(gs.hudctx, 520, 10, "Hole "+gs.hole, 10, "rgba(255,255,0,0.9)");
+
+        if (!ballmoving())
+          showheading();
+
+        if (gs.swingstage>0)
+          swingmeter();
+
+        windmeter();
+
+        showinfobox();
+      }
+      break;
+
+    default:
+      gs.state=0;
+      break;
   }
-  else
-  {
-    shadowwrite(gs.hudctx, 520, 10, "Hole "+gs.hole, 10, "rgba(255,255,0,0.9)");
 
-    if (!ballmoving())
-      showheading();
-
-    if (gs.swingstage>0)
-      swingmeter();
-
-    windmeter();
-
-    showinfobox();
-  }
 }
 
 // Update step
 function update()
 {
+  switch (gs.state)
+  {
+    case 0: // Title
+      if (ispressed(16)) // Action
+      {
+        clearinputstate();
+
+        // Start game
+        gs.state=1;
+
+        // Set default heading
+        gs.heading=90;
+
+        // Draw current course
+        drawcourse(gs.hole-1);
+      }
+      else
+        return;
+      break;
+
+    case 1: // In game
+      // Do nothing
+      break;
+
+    case 2: // Completed
+      if (ispressed(16)) // Action
+      {
+        clearinputstate();
+
+        // Return to title screen
+        gs.state=0;
+      }
+      else
+        return;
+      break;
+
+    default:
+      gs.state=0;
+      break;
+  }
+
   if (gs.showscoreboard)
   {
     if ((ispressed(256)) // S
@@ -768,12 +856,9 @@ function rafcallback(timestamp)
 
     // Process the "steps" since last call
     while (gs.acc>gs.step)
-    {
-//      update();
-
       gs.acc-=gs.step;
-    }
-      update();
+
+    update();
   }
 
   // Remember when we were last called
@@ -782,9 +867,8 @@ function rafcallback(timestamp)
   // Perform a render step
   render();
 
-  // Request we are called on next frame if still playing
-  if (gs.state==2)
-    window.requestAnimationFrame(rafcallback);
+  // Request we are called on next frame
+  window.requestAnimationFrame(rafcallback);
 }
 
 // Handle screen resizing to maintain correctly centered display
@@ -1136,14 +1220,14 @@ function startup()
     e.preventDefault();
   };
 
+  window.onwheel=function(e)
+  {
+    gs.heading+=e.deltaY;
+    e.preventDefault();
+  };
+
   // Generate all the courses
   generatecourses();
-
-  // Put straight into game
-  gs.state=2;
-
-  // Draw current course
-  drawcourse(gs.hole-1);
 
   window.requestAnimationFrame(rafcallback);
 }
