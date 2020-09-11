@@ -26,6 +26,7 @@ A scoreboard is shown after each hole is completed. There are 18 holes in total.
 * Simple timelines
 * [Wichmann-Hill pseudorandom number generator](https://en.wikipedia.org/wiki/Wichmann%E2%80%93Hill) inspired by [Sploosh Kaboom](https://www.youtube.com/watch?v=1hs451PfFzQ) minigame in [The Legend of Zelda: Wind Waker](https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_The_Wind_Waker) on Nintendo GameCube
 * Trophies via [OS13k](https://github.com/KilledByAPixel/OS13k)
+* 3D trophy model creation using "[Solids of Revolution](https://en.wikipedia.org/wiki/Solid_of_revolution)" method (seen in Beebug magazine Vol.8 No.7 December 1989)
 
 # Tools used
 * [Ubuntu OS](https://www.ubuntu.com/)
@@ -40,7 +41,6 @@ A scoreboard is shown after each hole is completed. There are 18 holes in total.
 - [ ] Fix gamepad support
 - [ ] Play the course in 3D rather than top-down
 - [ ] Investigate using WebGL for rendering
-- [ ] Create a 3D trophy model using "[Solids of Revolution](https://en.wikipedia.org/wiki/Solid_of_revolution)" (seen in Beebug magazine Vol.8 No.7 December 1989)
 - [ ] Choose player avatar before starting
 
 # Attribution of assets and code tutorial
