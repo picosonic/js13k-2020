@@ -129,4 +129,4 @@ Added music (may become annoying). Double heading rotation speed. Don't allow sw
 
 10th September
 --------------
-Added a second piece of music to break the monotony. Testing gamepads (felt cute might remove later). Added 3D engine code inspired by a [tutorial](https://www.youtube.com/watch?v=XgMWc6LumG4) from Javidx9.
+Added a second piece of music to break the monotony. Testing gamepads (felt cute might remove later). Added 3D engine code inspired by a [tutorial](https://www.youtube.com/watch?v=XgMWc6LumG4) from Javidx9. Made background a radial gradient. Added back story and controls to README. Added colour to faces of 3D models. Handle end of game better.
