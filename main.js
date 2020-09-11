@@ -158,7 +158,7 @@ function addtrophy(icon, name, msg)
         break;
     }
 
-    localStorage['OS13kTrophy,'+emoji+',Coding Golf,'+name]=msg;
+    window.localStorage['OS13kTrophy,'+emoji+',Coding Golf,'+name]=msg;
   }
 
   catch (e) {}
