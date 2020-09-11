@@ -41,9 +41,12 @@ A scoreboard is shown after each hole is completed. There are 18 holes in total.
 - [ ] Create a 3D trophy model using "Solids of Revolution"
 - [ ] Choose player avatar before starting
 
+# Attribution of assets and code tutorial
+
 _Using some assets from [Kenney.nl "Minigolf Kit"](https://kenney.nl/assets/minigolf-kit) (Creative Commons Zero, CC0 license)._
 
 _Using "The Chrysanthemum" by Scott Joplin (in the public domain since it was published in 1904 - before 1924)._
 
 _Using "Black & White Rag" by George Botsford (in the public domain since it was published in 1908 - before 1924)._
+
 _Using code inspired by following a [tutorial](https://www.youtube.com/watch?v=XgMWc6LumG4) from @Javidx9._
