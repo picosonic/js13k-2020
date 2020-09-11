@@ -25,6 +25,7 @@ A scoreboard is shown after each hole is completed. There are 18 holes in total.
 * 8-bit tiny font (Repton inspired)
 * Simple timelines
 * [Wichmann-Hill pseudorandom number generator](https://en.wikipedia.org/wiki/Wichmann%E2%80%93Hill) inspired by [Sploosh Kaboom](https://www.youtube.com/watch?v=1hs451PfFzQ) minigame in [The Legend of Zelda: Wind Waker](https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_The_Wind_Waker) on Nintendo GameCube
+* Trophies via [OS13k](https://github.com/KilledByAPixel/OS13k)
 
 # Tools used
 * [Ubuntu OS](https://www.ubuntu.com/)
@@ -35,7 +36,14 @@ A scoreboard is shown after each hole is completed. There are 18 holes in total.
 * [Google closure compiler](https://closure-compiler.appspot.com/home)
 * [advzip](https://github.com/amadvance/advancecomp) (uses [7-Zip](https://sourceforge.net/projects/sevenzip/files/7-Zip/) deflate to compress further)
 
-_Using some assets from [Kenney.nl "Minigolf Kit"](https://kenney.nl/assets/minigolf-kit) (Creative Commons Zero, CC0 license)_
-_Using "The Chrysanthemum" by Scott Joplin (in the public domain since it was published in 1904 - before 1924)_
-_Using "Black & White Rag" by George Botsford (in the public domain since it was published in 1908 - before 1924)_
-_Using code inspired by following a [tutorial](https://www.youtube.com/watch?v=XgMWc6LumG4) from @Javidx9_
+# Stuff I'd have done with more time
+- [ ] Play the course in 3D rather than top-down
+- [ ] Create a 3D trophy model using "Solids of Revolution"
+- [ ] Choose player avatar before starting
+
+_Using some assets from [Kenney.nl "Minigolf Kit"](https://kenney.nl/assets/minigolf-kit) (Creative Commons Zero, CC0 license)._
+
+_Using "The Chrysanthemum" by Scott Joplin (in the public domain since it was published in 1904 - before 1924)._
+
+_Using "Black & White Rag" by George Botsford (in the public domain since it was published in 1908 - before 1924)._
+_Using code inspired by following a [tutorial](https://www.youtube.com/watch?v=XgMWc6LumG4) from @Javidx9._
