@@ -399,6 +399,8 @@ function scoreboard()
 
   gs.hudctx.fillRect(50, 50, gs.hudcanvas.width-100, gs.hudcanvas.height-100);
 
+  // Border lines
+
   // Title
   write(gs.hudctx, 200, 80, "Coding Golf - Broken Links", 8, "rgba(255,255,0,0.9)");
 
@@ -954,6 +956,8 @@ function resize()
 function generatecourses()
 {
   var x, y, w, lastx, lasty, bias, distance, dx, dy;
+  var cminy, cmaxy, cadjy;
+  var segment;
 
   for (var hole=0; hole<gs.holes; hole++)
   {
@@ -964,6 +968,11 @@ function generatecourses()
     lasty=y;
     bias=0;
 
+    // Init course vertical centering vars
+    cminy=ymax;
+    cmaxy=0;
+    cadjy=0;
+
     // Create data structue if needed
     if (gs.courses[hole]==undefined)
       gs.courses[hole]={segments:[], numsegments:0, w:w};
@@ -972,14 +981,18 @@ function generatecourses()
     gs.courses[hole].segments=[];
     gs.courses[hole].numsegments=Math.floor(rng()*(hole/3))+13;
 
-    // Centre course in view
+    // Centre course horizontally in view
     x=(xmax/2)-((gs.courses[hole].numsegments*(xmax/20))/2);
 
     // Calculate segments
-    for (var segment=0; segment<gs.courses[hole].numsegments; segment++)
+    for (segment=0; segment<gs.courses[hole].numsegments; segment++)
     {
       x+=(xmax/20);
       y=lasty+((Math.floor((rng()*2)+(rng()*bias)))*(ymax/20));
+
+      // Cache extremties of course
+      if (y<cminy) cminy=y;
+      if (y>cmaxy) cmaxy=y;
 
       gs.courses[hole].segments.push({x:x, y:y, w:w});
 
@@ -987,6 +1000,11 @@ function generatecourses()
       lasty=y;
       bias=(lasty>y?1:-1);
     }
+
+    // Centre course vertically in view
+    cadjy=((cmaxy-cminy)/2);
+    for (segment=0; segment<gs.courses[hole].numsegments; segment++)
+      gs.courses[hole].segments[segment].y-=cadjy;
 
     // Length of course
     dx=Math.abs(gs.courses[hole].segments[gs.courses[hole].segments.length-1].x-gs.courses[hole].segments[0].x);
