@@ -241,6 +241,10 @@ class engine3D
         name="coriolis";
         break;
 
+      case 3:
+        name="trophy";
+        break;
+
       default:
         break;
     }
@@ -417,11 +421,57 @@ class engine3D
   }
 }
 
+// Make a 3D trophy model using "Solids of Revolution" - Beebug Vol.8 No.7 December 1989
+function maketrophy()
+{
+  var obj={t:"trophy", v:[], f:[], c:[], s:0.05}; // Empty model
+  var points=[
+    [0, 139], // Base
+    [43, 139],
+    [43, 123],
+    [8, 116], // Handle
+    [11, 71],
+    [47, 67], // Cup
+    [54, 31],
+    [69, 28],
+    [48, 28], // Inside
+    [42, 62],
+    [0, 69]
+  ]; // 2D points for X,Y
+  var vnum=0;
+  var sectors=10;
+
+  // Work through each point to generate 3D vertexes
+  for (var i=0; i<points.length; i++)
+  {
+    for (var deg=0; deg<=360; deg+=(360/sectors))
+    {
+      var rad=(deg%360)*PIOVER180;
+      var v=[Math.floor(points[i][0]*Math.cos(rad)), Math.floor(points[i][0]*Math.sin(rad)), points[i][1]-50];
+      obj.v.push(v);
+      vnum++;
+
+      // Generate faces
+      if ((i>0) && (deg>0))
+      {
+        obj.f.push([vnum-1, vnum, vnum-sectors-2]);
+        obj.c.push(14);
+        obj.f.push([vnum, vnum-sectors-1, vnum-sectors-2]);
+        obj.c.push(14);
+      }
+    }
+  }
+
+  models.push(obj);
+}
+
 // ***************************************************************************
 
 function threedeeinit()
 {
   gsthreedee=new engine3D;
+
+  maketrophy();
 
   tl.reset();
   tl.add(5000, function(){gsthreedee.nextmodel();});
