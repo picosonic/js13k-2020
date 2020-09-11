@@ -38,7 +38,8 @@ A scoreboard is shown after each hole is completed. There are 18 holes in total.
 
 # Stuff I'd have done with more time
 - [ ] Play the course in 3D rather than top-down
-- [ ] Create a 3D trophy model using "Solids of Revolution"
+- [ ] Investigate using WebGL for rendering
+- [ ] Create a 3D trophy model using "[Solids of Revolution](https://en.wikipedia.org/wiki/Solid_of_revolution)" (seen in Beebug magazine Vol.8 No.7 December 1989)
 - [ ] Choose player avatar before starting
 
 # Attribution of assets and code tutorial
