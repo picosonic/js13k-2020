@@ -225,7 +225,7 @@ class engine3D
     var name="club";
 
     this.model++;
-    if (this.model>2) this.model=0;
+    if (this.model>=models.length) this.model=0;
 
     switch (this.model)
     {
