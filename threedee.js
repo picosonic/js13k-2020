@@ -30,6 +30,7 @@ var ffovrad=1/Math.tan((ffov/2)/(180*Math.PI)); // Tangent of field of view calc
 var run3d=false;
 
 var gsthreedee=null;
+var tl=new timelineobj();
 
 // Deep clone an object
 function deepclone(obj)
@@ -60,23 +61,14 @@ class vec3d
 // Simplest 3D primative, contains 3 vertices
 class triangle
 {
-  constructor(a, b, c, red, green, blue)
+  constructor(a=undefined, b=undefined, c=undefined, red=255, green=255, blue=255)
   {
     this.p=new Array(3);
     this.shade=1; // How illuminated the triangle is 1=100%
 
-    if ((red==undefined) && (green==undefined) && (blue==undefined))
-    {
-      this.r=255;
-      this.g=255;
-      this.b=255;
-    }
-    else
-    {
-      this.r=red;
-      this.g=green;
-      this.b=blue;
-    }
+    this.r=red;
+    this.g=green;
+    this.b=blue;
 
     if ((a==undefined) && (b==undefined) && (c==undefined))
     {
@@ -99,6 +91,11 @@ class triangle
 class mesh
 {
   constructor()
+  {
+    this.tris=[];
+  }
+
+  cleartris()
   {
     this.tris=[];
   }
@@ -200,7 +197,9 @@ class engine3D
     this.matproj.set(2, 3, 1);
     this.matproj.set(3, 3, 0);
 
-    this.meshcube.loadfromobject(this.findmodel("coriolis"));
+    this.model=0;
+    this.meshcube.cleartris();
+    this.meshcube.loadfromobject(this.findmodel("club"));
   }
 
   // Find 3D model by name
@@ -220,6 +219,37 @@ class engine3D
     window.requestAnimationFrame(this.drawframe.bind(this));
   }
 
+  // Switch model
+  nextmodel()
+  {
+    var name="club";
+
+    this.model++;
+    if (this.model>2) this.model=0;
+
+    switch (this.model)
+    {
+      case 0:
+        name="club";
+        break;
+
+      case 1:
+        name="flag";
+        break;
+
+      case 2:
+        name="coriolis";
+        break;
+
+      default:
+        break;
+    }
+
+    this.meshcube.cleartris();
+    this.meshcube.loadfromobject(this.findmodel(name));
+  }
+
+  // Stop engine
   stop()
   {
     run3d=false;
@@ -392,4 +422,8 @@ class engine3D
 function threedeeinit()
 {
   gsthreedee=new engine3D;
+
+  tl.reset();
+  tl.add(5000, function(){gsthreedee.nextmodel();});
+  tl.begin(0);
 }
