@@ -5,7 +5,7 @@ JS13KGames entry for 2020, theme is "**404 THEME (NOT) FOUND**".
 
 ![Coding Golf - Broken Links](big_screenshot.png?raw=true "Coding Golf - Broken Links")
 
-With planet Figadore ravaged by the Regulith virus, all sporting events have been cancelled. Determined to play a round of golf, Fred sneaks on to the "Coding Golf" island golfcourse where he works, to play a game.
+With planet Figadore ravaged by the Regolith virus, all sporting events have been cancelled. Determined to play a round of golf, Fred sneaks on to the "Coding Golf" island golfcourse where he works, to play a game.
 
 Your mission is to help Fred get the lowest score possible on each hole so that he can win the "Broken Links" championship trophy.
 
