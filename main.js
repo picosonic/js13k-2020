@@ -116,7 +116,8 @@ var gs={
   txttimeline:new timelineobj(),
   showscoreboard:false,
   state:0, // 0=title, 1=playing, 2=completed
-  music:false
+  music:false,
+  completed:false
 };
 
 // Calculate Par for hole
@@ -182,7 +183,7 @@ function strokeresult(hole)
 // Check if the ball is currently moving
 function ballmoving()
 {
-  return ((Math.abs(gs.ballside.vx)>0.05) || (Math.abs(gs.ballside.vy)>0.05));
+  return ((Math.abs(gs.ballside.vx)>0.08) || (Math.abs(gs.ballside.vy)>0.08));
 }
 
 // Move the ball onwards
@@ -191,7 +192,7 @@ function moveball()
   var ax, bx, distance, ay, by;
 
   // Apply gravity
-  if (gs.ballside.vy<gs.terminalvelocity)
+  if ((gs.ballside.y<ymax) && (gs.ballside.vy<gs.terminalvelocity))
     gs.ballside.vy+=gs.gravity;
 
   // Apply wind when off ground
@@ -428,6 +429,9 @@ function scoreboard()
   }
 
   // Total
+  if (gs.completed)
+    write(gs.hudctx, 750, 600, "Final", 6, "rgba(255,255,0,0.9)");
+
   write(gs.hudctx, 900, 600, "Total", 6, "rgba(255,255,0,0.9)");
   for (hole=0; hole<gs.holes; hole++)
     total+=gs.strokes[hole];
@@ -540,7 +544,7 @@ function render()
       gs.hudctx.clearRect(0, 0, gs.canvas.width, gs.canvas.height);
       shadowwrite(gs.hudctx, 200, 20, "Coding Go f", 20, "rgba(255,255,255,0.9)");
       shadowwrite(gs.hudctx, 400, 200, "Broken Links", 10, "rgba(255,255,0,0.9)");
-      shadowwrite(gs.hudctx, 180, 650, "Press Space/Enter/Gamepad/Mouse to play", 6, "rgba(255,255,0,"+(((gs.lasttime%1200))/1200).toFixed(2)+")");
+      shadowwrite(gs.hudctx, 250, 650, "Press Space/Enter/Mouse to play", 6, "rgba(255,255,0,"+(((gs.lasttime%1200))/1200).toFixed(2)+")");
 
       gs.hudctx.fillStyle="rgb(255,255,255)";
       gs.hudctx.strokeStyle="rgb(255,255,255)";
@@ -628,6 +632,13 @@ function update()
         // Stop the 3D renderer
         gsthreedee.stop();
 
+        // Start at hole 1
+        gs.hole=1;
+
+        // Clear strokes from any previous game
+        for (var i=0; i<gs.strokes.length; i++)
+          gs.strokes[i]=0;
+
         // Start game
         gs.state=1;
 
@@ -672,6 +683,15 @@ function update()
       clearinputstate();
 
       gs.showscoreboard=false;
+
+      if (gs.completed)
+      {
+        // Return to title screen
+        gsthreedee.start();
+        gs.state=0;
+
+        gs.completed=false;
+      }
     }
 
     return;
@@ -1125,15 +1145,15 @@ function nexthole()
   gs.showscoreboard=true;
 
   gs.txttimeline.reset();
-  gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); gs.fxctx.fillStyle="rgba(0,0,0,0.6)"; gs.fxctx.fillRect(0, 0, gs.hudcanvas.width, gs.hudcanvas.height);shadowwrite(gs.fxctx, (xmax/2)-((resulttxt.length/2)*(20*4)), 200,resulttxt, 20, "rgb(255,255,255)");});
+  gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); gs.fxctx.fillStyle="rgba(0,0,0,0.8)"; gs.fxctx.fillRect(0, 0, gs.hudcanvas.width, gs.hudcanvas.height);shadowwrite(gs.fxctx, (xmax/2)-((resulttxt.length/2)*(20*4)), 200,resulttxt, 20, "rgb(255,255,255)");});
   gs.txttimeline.add(2000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height);});
   gs.txttimeline.begin(1);
 
   gs.hole++;
   if (gs.hole>gs.holes)
   {
-    gs.hole=1;
-    // TODO END OF GAME
+    gs.hole--;
+    gs.completed=true;
   }
 
   // Draw the new course
