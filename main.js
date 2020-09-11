@@ -120,6 +120,50 @@ var gs={
   completed:false
 };
 
+// OS13k trophies
+function addtrophy(icon, name, msg)
+{
+  try
+  {
+    var emoji="😕";
+
+    switch (icon)
+    {
+      case 0:
+        emoji="⛳";
+        break;
+
+      case 1:
+        emoji="🏌️";
+        break;
+
+      case 2:
+        emoji="🏆";
+        break;
+
+      case 3:
+        emoji="🌊";
+        break;
+
+      case 4:
+        emoji="🐦";
+        break;
+
+      case 5:
+        emoji="🦅";
+        break;
+
+      default:
+        emoji="😕";
+        break;
+    }
+
+    localStorage['OS13kTrophy,'+emoji+',Coding Golf,'+name]=msg;
+  }
+
+  catch (e) {}
+}
+
 // Calculate Par for hole
 function calculatepar(distance)
 {
@@ -148,10 +192,12 @@ function strokeresult(hole)
       break;
 
     case -2:
+      addtrophy(5, "Eagle Eyed", "2 under par");
       return "Eagle";
       break;
 
     case -1:
+      addtrophy(4, "Birdie Song", "1 under par");
       return "Birdie";
       break;
 
@@ -253,6 +299,8 @@ function moveball()
         gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); shadowwrite(gs.fxctx, 390, 200,"Sploosh", 20, "rgb(135,206,235)");});
         gs.txttimeline.add(1000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height);});
         gs.txttimeline.begin(1);
+
+        addtrophy(3, "Sploosh", "Lost your ball in the sea");
 
         return;
       }
@@ -808,6 +856,8 @@ function update()
       gs.txttimeline.add(3000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height);});
       gs.txttimeline.begin(1);
 
+      addtrophy(1, "Fore Oh Fore", "Struck Ball");
+
       gs.swingstage=0;
       break;
 
@@ -1162,6 +1212,8 @@ function nexthole()
   var resulttxt=strokeresult(gs.hole);
   gs.showscoreboard=true;
 
+  addtrophy(0, "Completed Hole", "Hole "+gs.hole);
+
   gs.txttimeline.reset();
   gs.txttimeline.add(0, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height); gs.fxctx.fillStyle="rgba(0,0,0,0.8)"; gs.fxctx.fillRect(0, 0, gs.hudcanvas.width, gs.hudcanvas.height);shadowwrite(gs.fxctx, (xmax/2)-((resulttxt.length/2)*(20*4)), 200,resulttxt, 20, "rgb(255,255,255)");});
   gs.txttimeline.add(2000, function(){gs.fxctx.clearRect(0, 0, gs.fxcanvas.width, gs.fxcanvas.height);});
@@ -1172,6 +1224,7 @@ function nexthole()
   {
     gs.hole--;
     gs.completed=true;
+    addtrophy(2, "Completed Course", "Broken Links");
   }
 
   // Draw the new course
