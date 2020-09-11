@@ -133,4 +133,4 @@ Added a second piece of music to break the monotony. Testing gamepads (felt cute
 
 11th September
 --------------
-Centred course in view vertically. Added trophies via OS13k.
+Centred course in view vertically. Added trophies via OS13k. Added 3D model generation using 2D profiles. Submitted to JS13k 2020 competition.
