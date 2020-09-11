@@ -712,7 +712,6 @@ function update()
         clearinputstate();
 
         // Return to title screen
-        gsthreedee.start();
         gs.state=0;
       }
       else
@@ -737,11 +736,12 @@ function update()
       if (gs.completed)
       {
         // Return to title screen
-        gsthreedee.start();
         gs.state=0;
 
         gs.completed=false;
       }
+      else
+        gsthreedee.stop();
     }
 
     return;
@@ -910,6 +910,7 @@ function update()
     clearinputstate();
 
     gs.showscoreboard=true;
+    gsthreedee.start();
   }
 }
 
@@ -1211,6 +1212,7 @@ function nexthole()
 {
   var resulttxt=strokeresult(gs.hole);
   gs.showscoreboard=true;
+  gsthreedee.start();
 
   addtrophy(0, "Completed Hole", "Hole "+gs.hole);
 
