@@ -113,7 +113,9 @@ Added wind direction and speed indcators.
 
 28th August
 -----------
-Added golf club and golf flag 3D models based on kenney.nl models. Added "Fore Oh Fore" upon hit.
+![Golf club](club.gif?raw=true "Golf club 3D model")
+
+At the half way point now. Added golf club and golf flag 3D models based on [kenney.nl](https://kenney.nl/assets/minigolf-kit) models. Added "Fore Oh Fore" upon hit.
 
 2nd September
 -------------
