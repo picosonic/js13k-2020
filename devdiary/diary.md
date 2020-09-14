@@ -72,6 +72,8 @@ Added some basic wind processing.
 
 19th August
 -----------
+![Maths](maths.png?raw=true "Converting 2D course to 3D")
+
 Playing about with ideas for the course genertor.
 
 20th August
