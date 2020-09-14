@@ -46,6 +46,8 @@ Just getting some game ideas together before starting to do coding experiments.
 
 14th August
 -----------
+![Sploosh Kaboom](sploosh.png?raw=true "Sploosh Kaboom")
+
 Decided there will be some aspect of predictable random number generation in my game. I liked reading the blog about [Wichmann-Hill RNG](https://en.wikipedia.org/wiki/Wichmann%E2%80%93Hill) being used by [Sploosh Kaboom](https://www.youtube.com/watch?v=1hs451PfFzQ) mini game in GC [The Legend of Zelda: The Wind Waker](https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_The_Wind_Waker) and decided to implement it in JS.
 
 15th August
