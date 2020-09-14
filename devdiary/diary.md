@@ -52,6 +52,8 @@ Decided there will be some aspect of predictable random number generation in my 
 
 15th August
 -----------
+![Golf](golf.png?raw=true "Golf")
+
 Decided to go with my first idea of a golf game for my JS13k game so have been learning golf terms/jargon and mechanics in preparation. Playing a few rounds of [Everybody's Golf](https://en.wikipedia.org/wiki/Everybody%27s_Golf_Portable) on the [Sony PSP](https://en.wikipedia.org/wiki/PlayStation_Portable). Going to name my game **"Coding Golf - Broken Links"**.
 
 16th August
