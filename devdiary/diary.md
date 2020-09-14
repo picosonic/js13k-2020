@@ -1,5 +1,7 @@
 # Dev Diary / Postmortem
 
+![Coding Golf - Broken Links](../big_screenshot.png?raw=true "Coding Golf - Broken Links")
+
 **Coding Golf - Broken Links**
 
 This was my third game jam entry, and my fourth HTML5/JS game. My first from JS13k 2018 is available here [Planet Figadore has gone OFFLINE](https://github.com/picosonic/js13k-2018) and my second from JS13k 2019 is available here [BACKSPACE - Return to planet Figadore](https://github.com/picosonic/js13k-2019).
