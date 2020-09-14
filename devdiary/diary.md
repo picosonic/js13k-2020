@@ -74,7 +74,7 @@ Added some basic wind processing.
 -----------
 ![Maths](maths.png?raw=true "Converting 2D course to 3D")
 
-Playing about with ideas for the course genertor.
+Playing about with ideas for the course generator. I want to convert the 2D courses into a 3D representaion which can be navigated in 3D. Trying to work out all the maths involved in generating the 3D meshes.
 
 20th August
 -----------
