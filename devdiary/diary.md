@@ -54,7 +54,7 @@ Decided there will be some aspect of predictable random number generation in my 
 -----------
 ![Golf](golf.png?raw=true "Golf")
 
-Decided to go with my first idea of a golf game for my JS13k game so have been learning golf terms/jargon and mechanics in preparation. Playing a few rounds of [Everybody's Golf](https://en.wikipedia.org/wiki/Everybody%27s_Golf_Portable) on the [Sony PSP](https://en.wikipedia.org/wiki/PlayStation_Portable). Going to name my game **"Coding Golf - Broken Links"**.
+Decided to go with my first idea of a golf game for my JS13k game so have been [learning golf terms/jargon and mechanics](https://github.com/picosonic/js13k-2020/blob/master/devdiary/notes.md) in preparation. Playing a few rounds of [Everybody's Golf](https://en.wikipedia.org/wiki/Everybody%27s_Golf_Portable) on the [Sony PSP](https://en.wikipedia.org/wiki/PlayStation_Portable). Going to name my game **"Coding Golf - Broken Links"**.
 
 16th August
 -----------
@@ -82,7 +82,7 @@ More work on course generator.
 
 21st August
 -----------
-At this point I was having a lot of difficulty with the 2D to 3D conversion and so decided to stick with 2D for now so that I could concentrate on adding the rest of the gameplay, with a though to come back to 3D later on if I felt there was enough time. Added representation of tee and hole to course generator. Added keyboard and gamepad libraries from my previous JS13k gamejam entries.
+At this point I was having a lot of difficulty with the 2D to 3D conversion and so decided to stick with 2D for now so that I could concentrate on adding the rest of the gameplay, with a thought to come back to 3D later on if I felt there was enough time. Added representation of tee and hole to course generator. Added keyboard and gamepad libraries from my previous JS13k gamejam entries.
 
 22nd August
 -----------
