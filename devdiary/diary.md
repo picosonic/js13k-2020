@@ -107,7 +107,9 @@ Added wind direction and speed indcators.
 
 27th August
 -----------
-Added golf ball 3D model.
+![Golf ball](coriolis.gif?raw=true "Golf ball 3D model")
+
+"THAT'S NO MOON". Created my first 3D model of a golf ball. This is a low poly cuboctahedron, aka Coriolis Space Station.
 
 28th August
 -----------
