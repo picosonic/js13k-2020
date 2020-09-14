@@ -105,7 +105,7 @@ Added writing text with shadow. More work on course generator. Added timeline li
 
 26th August
 -----------
-Added wind direction and speed indcators to HUD.
+Added wind direction and speed indicators to HUD.
 
 27th August
 -----------
