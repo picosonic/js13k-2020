@@ -58,7 +58,7 @@ Decided to go with my first idea of a golf game for my JS13k game so have been l
 
 16th August
 -----------
-Added default styling, canvas, gamestate and startup code. Also fixed display area to 1280x720 resolution with auto resizing to fill the available area but keeping the resolution and aspect ratio (this adds black bars when the aspect ratio doesn't match). I may detect portrait and rotate as appropriate for mobile oplay.
+Added default styling, canvas, gamestate and startup code. Also fixed display area to 1280x720 resolution with auto resizing to fill the available area but keeping the resolution and aspect ratio (this adds black bars when the aspect ratio doesn't match). I may detect portrait and rotate as appropriate for mobile play.
 
 17th August
 -----------
@@ -139,4 +139,6 @@ Added a second piece of music to break the monotony. Testing gamepads (felt cute
 
 11th September
 --------------
+![Trophies](trophies.png?raw=true "OS13k trophies")
+
 Centred course in view vertically. Added trophies via OS13k. Added 3D model generation using 2D profiles. Submitted to JS13k 2020 competition.
