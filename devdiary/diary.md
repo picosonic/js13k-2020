@@ -159,4 +159,6 @@ Added trophies via OS13k.
 
 Added 3D model generation using 2D profiles, based on [Solids of Revolution](https://en.wikipedia.org/wiki/Solid_of_revolution) code found in [Beebug magazine](http://8bs.com/beebugmags.htm) Vol.8 No.7 from December 1989.
 
+![Generated trophy](trophy.gif?raw=true "Generated trophy 3D model")
+
 Submitted to JS13k 2020 competition as [Coding Golf - Broken Links](http://js13kgames.com/entries/coding-golf-broken-links).
